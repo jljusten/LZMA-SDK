@@ -1,6 +1,12 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  Version 4.02                2004-06-10
+  --------------------------------------
+    - C++ LZMA Encoder/Decoder code now is more portable
+      and it can be compiled by GCC on Linux.
+
+
   Version 4.01                2004-02-15
   --------------------------------------
     - Some detection of data corruption was enabled.
@@ -11,9 +17,23 @@ HISTORY of the LZMA SDK
           return 0xFF;
         }
 
+
   Version 4.00                2004-02-13
   --------------------------------------
-    - Original version
+    - Original version of LZMA SDK
 
+
+
+HISTORY of the LZMA
+-------------------
+  2001-2004:  Improvements to LZMA compressing/decompressing code, 
+              keeping compatibility with original LZMA format
+  1996-2001:  Development of LZMA compression format
+
+  Some milestones:
+
+  2001-08-30: LZMA compression was added to 7-Zip
+  1999-01-02: First version of 7-Zip was released
+  
 
 End of document
