@@ -1,6 +1,11 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  Version 4.37 beta           2005-04-06
+  --------------------------------------
+    - Fixes in C++ code: code could no be compiled if _NO_EXCEPTIONS was defined. 
+
+  
   Version 4.35 beta           2005-03-02
   --------------------------------------
     - Bug was fixed in C++ version of LZMA Decoder:
