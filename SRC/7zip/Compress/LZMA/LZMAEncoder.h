@@ -189,7 +189,6 @@ public:
 
 }
 
-
 class CEncoder : 
   public ICompressCoder,
   public ICompressSetOutStream,
@@ -201,8 +200,6 @@ class CEncoder :
   COptimal _optimum[kNumOpts];
   CMyComPtr<IMatchFinder> _matchFinder; // test it
   NRangeCoder::CEncoder _rangeEncoder;
-public:
-private:
 
   CMyBitEncoder _isMatch[kNumStates][NLength::kNumPosStatesEncodingMax];
   CMyBitEncoder _isRep[kNumStates];
@@ -338,17 +335,22 @@ private:
   void FillDistancesPrices();
   void FillAlignPrices();
     
-  void ReleaseStreams()
+  void ReleaseMFStream()
   {
     if (_matchFinder && _needReleaseMFStream)
     {
       _matchFinder->ReleaseStream();
       _needReleaseMFStream = false;
     }
-    // _rangeEncoder.ReleaseStream();
   }
 
-  HRESULT Flush();
+  void ReleaseStreams()
+  {
+    ReleaseMFStream();
+    _rangeEncoder.ReleaseStream();
+  }
+
+  HRESULT Flush(UInt32 nowPos);
   class CCoderReleaser
   {
     CEncoder *_coder;

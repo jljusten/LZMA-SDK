@@ -7,13 +7,16 @@
 
 bool CLZOutWindow::Create(UInt32 windowSize)
 {
-  _pos = 0;
-  _streamPos = 0;
   const UInt32 kMinBlockSize = 1;
   if (windowSize < kMinBlockSize)
     windowSize = kMinBlockSize;
   if (_buffer != 0 && _windowSize == windowSize)
     return true;
+
+  // It's here to allow Solid decoding / and calling Create for RAR
+  _pos = 0;
+  _streamPos = 0;
+  
   Free();
   _windowSize = windowSize;
   _buffer = (Byte *)::BigAlloc(windowSize);
