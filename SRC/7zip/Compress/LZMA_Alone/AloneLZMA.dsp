@@ -468,5 +468,13 @@ SOURCE=..\..\ICoder.h
 
 SOURCE=.\LzmaAlone.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\LzmaBench.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LzmaBench.h
+# End Source File
 # End Target
 # End Project

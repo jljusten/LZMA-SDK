@@ -32,6 +32,8 @@
 #include "../LZMA/LZMADecoder.h"
 #include "../LZMA/LZMAEncoder.h"
 
+#include "LzmaBench.h"
+
 using namespace NCommandLineParser;
 
 namespace NKey {
@@ -75,6 +77,7 @@ static void PrintHelp()
   fprintf(stderr, "\nUsage:  LZMA <e|d> inputFile outputFile [<switches>...]\n"
              "  e: encode file\n"
              "  d: decode file\n"
+             "  b: Benchmark\n"
     "<Switches>\n"
     "  -a{N}:  set compression mode - [0, 2], default: 2 (max)\n"
     "  -d{N}:  set dictionary - [0,28], default: 23 (8MB)\n"
@@ -126,7 +129,7 @@ static bool GetNumber(const wchar_t *s, UInt32 &value)
 
 int main2(int n, const char *args[])
 {
-  fprintf(stderr, "\nLZMA 4.02 Copyright (c) 1999-2004 Igor Pavlov  2004-06-10\n");
+  fprintf(stderr, "\nLZMA 4.03 Copyright (c) 1999-2004 Igor Pavlov  2004-06-18\n");
 
   if (n == 1)
   {
@@ -163,6 +166,26 @@ int main2(int n, const char *args[])
   if (paramIndex >= nonSwitchStrings.Size())
     IncorrectCommand();
   const UString &command = nonSwitchStrings[paramIndex++]; 
+
+  if (command.CompareNoCase(L"b") == 0)
+  {
+    UInt32 dictionary = 1 << 21;
+    if(parser[NKey::kDictionary].ThereIs)
+    {
+      UInt32 dicLog;
+      if (!GetNumber(parser[NKey::kDictionary].PostStrings[0], dicLog))
+        IncorrectCommand();
+      dictionary = 1 << dicLog;
+    }
+    const UInt32 kNumDefaultItereations = 10;
+    UInt32 numIterations = kNumDefaultItereations;
+    {
+      if (paramIndex < nonSwitchStrings.Size())
+        if (!GetNumber(nonSwitchStrings[paramIndex++], numIterations))
+          numIterations = kNumDefaultItereations;
+    }
+    return LzmaBenchmark(numIterations, dictionary);
+  }
 
   bool encodeMode;
   if (command.CompareNoCase(L"e") == 0)
@@ -373,9 +396,14 @@ int main2(int n, const char *args[])
 int main(int n, const char *args[])
 {
   try { return main2(n, args); }
+  catch(const char *s) 
+  { 
+    fprintf(stderr, "\nError: %s\n", s);
+    return 1; 
+  }
   catch(...) 
   { 
-    fprintf(stderr, "Error");
+    fprintf(stderr, "\nError\n");
     return 1; 
   }
 }

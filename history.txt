@@ -1,6 +1,13 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  Version 4.03                2004-06-18
+  --------------------------------------
+    - "Benchmark" command was added. It measures compressing 
+      and decompressing speed and shows rating values. 
+      Also it checks hardware errors.
+
+
   Version 4.02                2004-06-10
   --------------------------------------
     - C++ LZMA Encoder/Decoder code now is more portable

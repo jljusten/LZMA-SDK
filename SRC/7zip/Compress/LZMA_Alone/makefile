@@ -6,6 +6,7 @@ CFLAGS = -c -O3
 
 OBJS = \
   LzmaAlone.o \
+  LzmaBench.o \
   LZMADecoder.o \
   LZMAEncoder.o \
   LZInWindow.o \
@@ -30,7 +31,10 @@ $(PROG): $(OBJS)
 	$(CXX) -o $(PROG) $(LDFLAGS) $(OBJS) $(LIB)
 
 LzmaAlone.o: LzmaAlone.cpp
-	gcc $(CFLAGS) LzmaAlone.cpp
+	$(CXX) $(CFLAGS) LzmaAlone.cpp
+
+LzmaBench.o: LzmaBench.cpp
+	$(CXX) $(CFLAGS) LzmaBench.cpp
 
 LZMADecoder.o: ../LZMA/LZMADecoder.cpp
 	$(CXX) $(CFLAGS) ../LZMA/LZMADecoder.cpp

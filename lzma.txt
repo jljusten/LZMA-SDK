@@ -1,7 +1,7 @@
-LZMA SDK 4.02
+LZMA SDK 4.03
 -------------
 
-LZMA SDK 4.02  Copyright (C) 1999-2004 Igor Pavlov  2004-06-10
+LZMA SDK 4.03  Copyright (C) 1999-2004 Igor Pavlov
 
 LZMA SDK provides developers with documentation, source code,
 and sample code necessary to write software that uses LZMA compression. 
@@ -155,6 +155,17 @@ Usage:  LZMA <e|d> inputFile outputFile [<switches>...]
   e: encode file
 
   d: decode file
+
+  b: Benchmark. There are two tests: compressing and decompressing 
+     with LZMA method. Benchmark shows rating in MIPS (million 
+     instructions per second). Rating value is calculated from 
+     measured speed and it is normalized with AMD Athlon XP CPU
+     results. Also Benchmark checks possible hardware errors (RAM 
+     errors in most cases). Benchmark uses these settings:
+     (-a1, -d21, -fb32, -mfbt4). You can change only -d. Also you 
+     can change number of iterations. Example for 30 iterations:
+	LZMA b 30
+     Default number of iterations is 10.
 
 <Switches>
   
