@@ -12,7 +12,7 @@ namespace NIO {
 bool CFileBase::OpenBinary(const char *name, int flags)
 {
   #ifdef O_BINARY
-  int flags |= O_BINARY;
+  flags |= O_BINARY;
   #endif
   Close();
   _handle = ::open(name, flags, 0666);

@@ -26,12 +26,15 @@ void CLZOutWindow::Free()
   _buffer = 0;
 }
 
-void CLZOutWindow::Init(ISequentialOutStream *stream, bool solid)
+void CLZOutWindow::SetStream(ISequentialOutStream *stream)
 {
-  // ReleaseStream();
+  ReleaseStream();
   _stream = stream;
-  // _stream->AddRef();
+  _stream->AddRef();
+}
 
+void CLZOutWindow::Init(bool solid)
+{
   if(!solid)
   {
     _streamPos = 0;
@@ -42,7 +45,6 @@ void CLZOutWindow::Init(ISequentialOutStream *stream, bool solid)
   #endif
 }
 
-/*
 void CLZOutWindow::ReleaseStream()
 {
   if(_stream != 0)
@@ -52,7 +54,6 @@ void CLZOutWindow::ReleaseStream()
     _stream = 0;
   }
 }
-*/
 
 void CLZOutWindow::FlushWithCheck()
 {
@@ -75,12 +76,15 @@ HRESULT CLZOutWindow::Flush()
     return ErrorCode;
   #endif
 
-  UInt32 processedSize;
-  HRESULT result = _stream->Write(_buffer + _streamPos, size, &processedSize);
-  if (result != S_OK)
-    return result;
-  if (size != processedSize)
-    return E_FAIL;
+  if(_stream != 0)
+  {
+    UInt32 processedSize;
+    HRESULT result = _stream->Write(_buffer + _streamPos, size, &processedSize);
+    if (result != S_OK)
+      return result;
+    if (size != processedSize)
+      return E_FAIL;
+  }
   if (_pos >= _windowSize)
     _pos = 0;
   _streamPos = _pos;

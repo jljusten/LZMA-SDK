@@ -498,13 +498,18 @@ STDMETHODIMP CEncoder::WriteCoderProperties(ISequentialOutStream *outStream)
   return S_OK;
 }
 
-STDMETHODIMP CEncoder::Init(
-    ISequentialOutStream *outStream)
+STDMETHODIMP CEncoder::SetOutStream(ISequentialOutStream *outStream)
+{
+  _rangeEncoder.SetStream(outStream);
+  return S_OK;
+}
+
+HRESULT CEncoder::Init()
 {
   CBaseState::Init();
 
   // RINOK(_matchFinder->Init(inStream));
-  _rangeEncoder.Init(outStream);
+  _rangeEncoder.Init();
 
   for(int i = 0; i < kNumStates; i++)
   {
@@ -1230,7 +1235,8 @@ HRESULT CEncoder::SetStreams(ISequentialInStream *inStream,
   _inStream = inStream;
   _finished = false;
   RINOK(Create());
-  RINOK(Init(outStream));
+  RINOK(SetOutStream(outStream));
+  RINOK(Init());
   
   // CCoderReleaser releaser(this);
 

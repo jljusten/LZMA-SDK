@@ -1,6 +1,13 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  Version 4.05                2004-08-25
+  --------------------------------------
+    - Source code of filters for x86, IA-64, ARM, ARM-Thumb 
+      and PowerPC code was included to SDK
+    - Some internal minor changes
+
+
   Version 4.04                2004-07-28
   --------------------------------------
     - More compatibility with some C++ compilers

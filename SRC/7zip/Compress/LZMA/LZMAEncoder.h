@@ -192,7 +192,7 @@ public:
 
 class CEncoder : 
   public ICompressCoder,
-  // public IInitMatchFinder,
+  public ICompressSetOutStream,
   public ICompressSetCoderProperties,
   public ICompressWriteCoderProperties,
   public CBaseState,
@@ -370,13 +370,13 @@ public:
 
   HRESULT Create();
 
-  MY_UNKNOWN_IMP2(
+  MY_UNKNOWN_IMP3(
+      ICompressSetOutStream,
       ICompressSetCoderProperties,
       ICompressWriteCoderProperties
       )
     
-  STDMETHOD(Init)(
-      ISequentialOutStream *outStream);
+  HRESULT Init();
   
   // ICompressCoder interface
   HRESULT SetStreams(ISequentialInStream *inStream,
@@ -404,6 +404,8 @@ public:
   
   // ICompressWriteCoderProperties
   STDMETHOD(WriteCoderProperties)(ISequentialOutStream *outStream);
+
+  STDMETHOD(SetOutStream)(ISequentialOutStream *outStream);
 
   virtual ~CEncoder() {}
 };
