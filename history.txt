@@ -1,6 +1,13 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  Version 4.35 beta           2005-03-02
+  --------------------------------------
+    - Bug was fixed in C++ version of LZMA Decoder:
+       If encoded stream was corrupted, decoder could access memory 
+       outside of allocated range.
+
+  
   Version 4.34 beta           2006-02-27
   --------------------------------------
     - Compressing speed and memory requirements for compressing were increased
