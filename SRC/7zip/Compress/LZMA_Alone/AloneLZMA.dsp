@@ -357,11 +357,11 @@ SOURCE=..\..\..\Windows\FileIO.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\..\Common\AlignedBuffer.cpp
+SOURCE=..\..\..\Common\Alloc.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Common\AlignedBuffer.h
+SOURCE=..\..\..\Common\Alloc.h
 # End Source File
 # Begin Source File
 
@@ -382,6 +382,10 @@ SOURCE=..\..\..\Common\CRC.h
 # Begin Source File
 
 SOURCE=..\..\..\Common\Defs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\MyCom.h
 # End Source File
 # Begin Source File
 

@@ -14,13 +14,14 @@ const UInt32 kTopValue = (1 << kNumTopBits);
 
 class CEncoder
 {
-  COutBuffer Stream;
   UInt64 Low;
   UInt32 Range;
   UInt32 _ffNum;
   Byte _cache;
-
 public:
+  COutBuffer Stream;
+  bool Create(UInt32 bufferSize) { return Stream.Create(bufferSize); }
+
   void Init(ISequentialOutStream *stream)
   {
     Stream.Init(stream);
@@ -128,6 +129,8 @@ public:
   CInBuffer Stream;
   UInt32 Range;
   UInt32 Code;
+  bool Create(UInt32 bufferSize) { return Stream.Create(bufferSize); }
+
   void Normalize()
   {
     while (Range < kTopValue)

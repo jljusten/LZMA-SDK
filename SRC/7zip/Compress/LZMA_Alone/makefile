@@ -1,8 +1,8 @@
-PROG=lzma
-CXX = gcc
-LIB = -lstdc++ -lm
-RM=rm
-CFLAGS = -c -O3
+PROG = lzma
+CXX = g++ -O3 -Wall
+LIB = -lm
+RM = rm -f
+CFLAGS = -c
 
 OBJS = \
   LzmaAlone.o \
@@ -15,7 +15,7 @@ OBJS = \
   InBuffer.o \
   OutBuffer.o \
   FileStreams.o \
-  AlignedBuffer.o \
+  Alloc.o \
   C_FileIO.o \
   CommandLineParser.o \
   CRC.o \
@@ -60,8 +60,8 @@ OutBuffer.o: ../../Common/OutBuffer.cpp
 FileStreams.o: ../../Common/FileStreams.cpp
 	$(CXX) $(CFLAGS) ../../Common/FileStreams.cpp
 
-AlignedBuffer.o: ../../../Common/AlignedBuffer.cpp
-	$(CXX) $(CFLAGS) ../../../Common/AlignedBuffer.cpp
+Alloc.o: ../../../Common/Alloc.cpp
+	$(CXX) $(CFLAGS) ../../../Common/Alloc.cpp
 
 C_FileIO.o: ../../../Common/C_FileIO.cpp
 	$(CXX) $(CFLAGS) ../../../Common/C_FileIO.cpp

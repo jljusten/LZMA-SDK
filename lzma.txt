@@ -1,7 +1,7 @@
-LZMA SDK 4.03
+LZMA SDK 4.04
 -------------
 
-LZMA SDK 4.03  Copyright (C) 1999-2004 Igor Pavlov
+LZMA SDK 4.04  Copyright (C) 1999-2004 Igor Pavlov
 
 LZMA SDK provides developers with documentation, source code,
 and sample code necessary to write software that uses LZMA compression. 
@@ -37,7 +37,8 @@ licenses are classified as
 LZMA SDK also can be available under a proprietary license for 
 those who cannot use the GNU LGPL or CPL in their code. To request
 such proprietary license or any additional consultations,
-write to support@7-zip.org
+send email message from that page:
+http://www.7-zip.org/support.html
 
 
 You should have received a copy of the GNU Lesser General Public
@@ -69,10 +70,11 @@ To compile C++ version of file->file LZMA, go to directory
 SRC/7zip/Compress/LZMA_Alone 
 and type "make" or "make clean all" to recompile all.
 
-WARNING: LIMITATION of UNIX/Linux version: The code for 
-file->file LZMA compressing and decompressing works correctly 
-only when files have ASCII names. Probably it will be fixed 
-in future versions.
+In some UNIX/Linux versions you must compile LZMA with static libraries.
+To compile with static libraries, change string in makefile
+LIB = -lm
+to string  
+LIB = -lm -static
 
 
 Files
@@ -489,5 +491,7 @@ and it will use only bt4 match finder.
 
 ---
 
-WWW:    http://www.7-zip.org
-E-mail: support@7-zip.org
+http://www.7-zip.org
+http://www.7-zip.org/support.html
+
+

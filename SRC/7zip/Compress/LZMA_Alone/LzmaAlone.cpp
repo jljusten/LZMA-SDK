@@ -129,7 +129,7 @@ static bool GetNumber(const wchar_t *s, UInt32 &value)
 
 int main2(int n, const char *args[])
 {
-  fprintf(stderr, "\nLZMA 4.03 Copyright (c) 1999-2004 Igor Pavlov  2004-06-18\n");
+  fprintf(stderr, "\nLZMA 4.04 Copyright (c) 1999-2004 Igor Pavlov  2004-07-28\n");
 
   if (n == 1)
   {
@@ -167,16 +167,22 @@ int main2(int n, const char *args[])
     IncorrectCommand();
   const UString &command = nonSwitchStrings[paramIndex++]; 
 
+  bool dictionaryIsDefined = false;
+  UInt32 dictionary = 1 << 21;
+  if(parser[NKey::kDictionary].ThereIs)
+  {
+    UInt32 dicLog;
+    if (!GetNumber(parser[NKey::kDictionary].PostStrings[0], dicLog))
+      IncorrectCommand();
+    dictionary = 1 << dicLog;
+    dictionaryIsDefined = true;
+  }
+  UString mf = L"BT4";
+  if (parser[NKey::kMatchFinder].ThereIs)
+    mf = parser[NKey::kMatchFinder].PostStrings[0];
+
   if (command.CompareNoCase(L"b") == 0)
   {
-    UInt32 dictionary = 1 << 21;
-    if(parser[NKey::kDictionary].ThereIs)
-    {
-      UInt32 dicLog;
-      if (!GetNumber(parser[NKey::kDictionary].PostStrings[0], dicLog))
-        IncorrectCommand();
-      dictionary = 1 << dicLog;
-    }
     const UInt32 kNumDefaultItereations = 10;
     UInt32 numIterations = kNumDefaultItereations;
     {
@@ -184,7 +190,8 @@ int main2(int n, const char *args[])
         if (!GetNumber(nonSwitchStrings[paramIndex++], numIterations))
           numIterations = kNumDefaultItereations;
     }
-    return LzmaBenchmark(numIterations, dictionary);
+    return LzmaBenchmark(stderr, numIterations, dictionary, 
+        mf.CompareNoCase(L"BT4") == 0);
   }
 
   bool encodeMode;
@@ -233,7 +240,7 @@ int main2(int n, const char *args[])
     const UString &outputName = nonSwitchStrings[paramIndex++]; 
     COutFileStream *outStreamSpec = new COutFileStream;
     outStream = outStreamSpec;
-    if (!outStreamSpec->Open(GetSystemString(outputName)))
+    if (!outStreamSpec->Create(GetSystemString(outputName), true))
     {
       fprintf(stderr, "\nError: can not open output file %s\n", 
         (const char *)GetOemString(outputName));
@@ -248,7 +255,9 @@ int main2(int n, const char *args[])
       new NCompress::NLZMA::CEncoder;
     CMyComPtr<ICompressCoder> encoder = encoderSpec;
 
-    UInt32 dictionary = 1 << 23;
+    if (!dictionaryIsDefined)
+      dictionary = 1 << 23;
+
     UInt32 posStateBits = 2;
     UInt32 litContextBits = 3; // for normal files
     // UInt32 litContextBits = 0; // for 32-bit data
@@ -256,7 +265,6 @@ int main2(int n, const char *args[])
     // UInt32 litPosBits = 2; // for 32-bit data
     UInt32 algorithm = 2;
     UInt32 numFastBytes = 128;
-    UString mf = L"BT4";
 
     bool eos = parser[NKey::kEOS].ThereIs || stdInMode;
  
@@ -264,13 +272,6 @@ int main2(int n, const char *args[])
       if (!GetNumber(parser[NKey::kMode].PostStrings[0], algorithm))
         IncorrectCommand();
 
-    if(parser[NKey::kDictionary].ThereIs)
-    {
-      UInt32 dicLog;
-      if (!GetNumber(parser[NKey::kDictionary].PostStrings[0], dicLog))
-        IncorrectCommand();
-      dictionary = 1 << dicLog;
-    }
     if(parser[NKey::kFastBytes].ThereIs)
       if (!GetNumber(parser[NKey::kFastBytes].PostStrings[0], numFastBytes))
         IncorrectCommand();
@@ -283,9 +284,6 @@ int main2(int n, const char *args[])
     if(parser[NKey::kPosBits].ThereIs)
       if (!GetNumber(parser[NKey::kPosBits].PostStrings[0], posStateBits))
         IncorrectCommand();
-
-    if (parser[NKey::kMatchFinder].ThereIs)
-      mf = parser[NKey::kMatchFinder].PostStrings[0];
 
     PROPID propIDs[] = 
     {
@@ -353,7 +351,7 @@ int main2(int n, const char *args[])
     }   
     else if (result != S_OK)
     {
-      fprintf(stderr, "\nEncoder error = %X\n", result);
+      fprintf(stderr, "\nEncoder error = %X\n", (unsigned int)result);
       return 1;
     }   
   }

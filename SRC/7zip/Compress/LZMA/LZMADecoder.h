@@ -4,6 +4,7 @@
 #define __LZMA_DECODER_H
 
 #include "../../../Common/MyCom.h"
+#include "../../../Common/Alloc.h"
 #include "../../ICoder.h"
 #include "../LZ/LZOutWindow.h"
 #include "../RangeCoder/RangeCoderBitTree.h"
@@ -77,21 +78,22 @@ public:
   ~CLiteralDecoder()  { Free(); }
   void Free()
   { 
-    delete []_coders;
+    MyFree(_coders);
     _coders = 0;
   }
-  void Create(int numPosBits, int numPrevBits)
+  bool Create(int numPosBits, int numPrevBits)
   {
     if (_coders == 0 || (numPosBits + numPrevBits) != 
         (_numPrevBits + _numPosBits) )
     {
       Free();
       UInt32 numStates = 1 << (numPosBits + numPrevBits);
-      _coders = new CLiteralDecoder2[numStates];
+      _coders = (CLiteralDecoder2 *)MyAlloc(numStates * sizeof(CLiteralDecoder2));
     }
     _numPosBits = numPosBits;
     _posMask = (1 << numPosBits) - 1;
     _numPrevBits = numPrevBits;
+    return (_coders != 0);
   }
   void Init()
   {
@@ -158,7 +160,7 @@ class CDecoder:
   NRangeCoder::CBitTreeDecoder<kNumMoveBits, kNumPosSlotBits> _posSlotDecoder[kNumLenToPosStates];
 
   CMyBitDecoder _posDecoders[kNumFullDistances - kEndPosModelIndex];
-  NRangeCoder::CReverseBitTreeDecoder<kNumMoveBits, kNumAlignBits> _posAlignDecoder;
+  NRangeCoder::CBitTreeDecoder<kNumMoveBits, kNumAlignBits> _posAlignDecoder;
   
   NLength::CDecoder _lenDecoder;
   NLength::CDecoder _repMatchLenDecoder;
@@ -209,6 +211,10 @@ public:
 
   // ICompressSetDecoderProperties
   STDMETHOD(SetDecoderProperties)(ISequentialInStream *inStream);
+
+  STDMETHOD(GetInStreamProcessedSize)(UInt64 *value);
+
+  virtual ~CDecoder() {}
 };
 
 }}
