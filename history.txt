@@ -1,6 +1,19 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  Version 4.16                2005-03-29
+  --------------------------------------
+    - Bug was fixed in LzmaDecode.c (ANSI-C LZMA Decoder): 
+       If _LZMA_OUT_READ was defined, and if encoded stream was corrupted,
+       decoder could access memory outside of allocated range.
+    - Speed optimization of ANSI-C LZMA Decoder (now it's about 20% faster).
+      Old version of LZMA Decoder now is in file LzmaDecodeSize.c. 
+      LzmaDecodeSize.c can provide slightly smaller code than LzmaDecode.c
+    - Small speed optimization in LZMA C++ code
+    - filter for SPARC's code was added
+    - Simplified version of .7z ANSI-C Decoder was included
+
+
   Version 4.06                2004-09-05
   --------------------------------------
     - Bug in v4.05 was fixed:

@@ -4,7 +4,7 @@
 
 #include "LzmaBench.h"
 
-#ifndef WIN32
+#ifndef _WIN32
 #include <time.h>
 #endif
 
@@ -243,7 +243,7 @@ STDMETHODIMP CCrcOutStream::WritePart(const void *data, UInt32 size, UInt32 *pro
 
 static UInt64 GetTimeCount()
 {
-  #ifdef WIN32
+  #ifdef _WIN32
   LARGE_INTEGER value;
   if (::QueryPerformanceCounter(&value))
     return value.QuadPart;
@@ -255,7 +255,7 @@ static UInt64 GetTimeCount()
 
 static UInt64 GetFreq()
 {
-  #ifdef WIN32
+  #ifdef _WIN32
   LARGE_INTEGER value;
   if (::QueryPerformanceFrequency(&value))
     return value.QuadPart;
@@ -341,6 +341,7 @@ static UInt64 GetDecompressRating(UInt64 elapsedTime,
   return MyMultDiv64(numCommands, elapsedTime);
 }
 
+/*
 static UInt64 GetTotalRating(
     UInt32 dictionarySize, 
     bool isBT4,
@@ -351,6 +352,7 @@ static UInt64 GetTotalRating(
   return (GetCompressRating(dictionarySize, isBT4, elapsedTimeEn, sizeEn) + 
     GetDecompressRating(elapsedTimeDe, inSizeDe, outSizeDe)) / 2;
 }
+*/
 
 static void PrintRating(FILE *f, UInt64 rating)
 {
@@ -410,9 +412,6 @@ int LzmaBenchmark(FILE *f, UInt32 numIterations, UInt32 dictionarySize, bool isB
   CMyComPtr<ISequentialOutStream> propStream = propStreamSpec;
   propStreamSpec->Init(f, kMaxLzmaPropSize);
   
-  CBenchmarkInStream *propDecoderStreamSpec = new CBenchmarkInStream;
-  CMyComPtr<ISequentialInStream> propDecoderStream = propDecoderStreamSpec;
-
   PROPID propIDs[] = 
   { 
     NCoderPropID::kDictionarySize,  
@@ -483,13 +482,12 @@ int LzmaBenchmark(FILE *f, UInt32 numIterations, UInt32 dictionarySize, bool isB
     CMyComPtr<ISequentialOutStream> crcOutStream = crcOutStreamSpec;
     
     UInt64 decodeTime;
-    for (int i = 0; i < 2; i++)
+    for (int j = 0; j < 2; j++)
     {
       inStreamSpec->Init(outStreamSpec->Buffer, compressedSize);
       crcOutStreamSpec->Init();
       
-      propDecoderStreamSpec->Init(propStreamSpec->Buffer, propStreamSpec->Pos);
-      if (decoderSpec->SetDecoderProperties(propDecoderStream) != S_OK)
+      if (decoderSpec->SetDecoderProperties2(propStreamSpec->Buffer, propStreamSpec->Pos) != S_OK)
       {
         fprintf(f, "\nError: Set Decoder Properties Error\n");
         return 1;

@@ -1,8 +1,8 @@
 PROG = lzma
-CXX = g++ -O3 -Wall
+CXX = g++ -O2 -Wall
 LIB = -lm
 RM = rm -f
-CFLAGS = -c
+CFLAGS = -c -I ../../../
 
 OBJS = \
   LzmaAlone.o \

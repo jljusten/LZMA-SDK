@@ -26,7 +26,7 @@ class CBCJ2_x86_Encoder:
   public ICompressCoder2,
   public CMyUnknownImp
 {
-  BYTE *_buffer;
+  Byte *_buffer;
 public:
   CBCJ2_x86_Encoder(): _buffer(0) {};
   ~CBCJ2_x86_Encoder();

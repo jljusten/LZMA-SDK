@@ -15,12 +15,12 @@ UInt32 PPC_B_Convert(Byte *data, UInt32 size, UInt32 nowPos, int encoding)
       )
     )
     {
-      UINT32 src = ((data[i + 0] & 3) << 24) |
+      UInt32 src = ((data[i + 0] & 3) << 24) |
         (data[i + 1] << 16) |
         (data[i + 2] << 8) |
         (data[i + 3] & (~3));
       
-      UINT32 dest;
+      UInt32 dest;
       if (encoding)
         dest = nowPos + i + src;
       else

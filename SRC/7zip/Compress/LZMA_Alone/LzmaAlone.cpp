@@ -2,18 +2,13 @@
 
 #include "StdAfx.h"
 
-#ifdef WIN32
-#include <initguid.h>
-#else
-#define INITGUID
-#endif
-
 #include "../../../Common/MyWindows.h"
+#include "../../../Common/MyInitGuid.h"
 
 // #include <limits.h>
 #include <stdio.h>
 
-#if defined(WIN32) || defined(OS2) || defined(MSDOS)
+#if defined(_WIN32) || defined(OS2) || defined(MSDOS)
 #include <fcntl.h>
 #include <io.h>
 #define MY_SET_BINARY_MODE(file) setmode(fileno(file),O_BINARY)
@@ -118,7 +113,7 @@ static bool GetNumber(const wchar_t *s, UInt32 &value)
   if (MyStringLen(s) == 0)
     return false;
   const wchar_t *end;
-  UInt64 res = ConvertStringToUINT64(s, &end);
+  UInt64 res = ConvertStringToUInt64(s, &end);
   if (*end != L'\0')
     return false;
   if (res > 0xFFFFFFFF)
@@ -129,7 +124,7 @@ static bool GetNumber(const wchar_t *s, UInt32 &value)
 
 int main2(int n, const char *args[])
 {
-  fprintf(stderr, "\nLZMA 4.05 Copyright (c) 1999-2004 Igor Pavlov  2004-08-25\n");
+  fprintf(stderr, "\nLZMA 4.16 Copyright (c) 1999-2004 Igor Pavlov  2005-03-29\n");
 
   if (n == 1)
   {
@@ -194,7 +189,7 @@ int main2(int n, const char *args[])
         mf.CompareNoCase(L"BT4") == 0);
   }
 
-  bool encodeMode;
+  bool encodeMode = false;
   if (command.CompareNoCase(L"e") == 0)
     encodeMode = true;
   else if (command.CompareNoCase(L"d") == 0)
@@ -360,7 +355,20 @@ int main2(int n, const char *args[])
     NCompress::NLZMA::CDecoder *decoderSpec = 
         new NCompress::NLZMA::CDecoder;
     CMyComPtr<ICompressCoder> decoder = decoderSpec;
-    if (decoderSpec->SetDecoderProperties(inStream) != S_OK)
+    const UInt32 kPropertiesSize = 5;
+    Byte properties[kPropertiesSize];
+    UInt32 processedSize;
+    if (inStream->Read(properties, kPropertiesSize, &processedSize) != S_OK)
+    {
+      fprintf(stderr, "Read error");
+      return 1;
+    }
+    if (processedSize != kPropertiesSize)
+    {
+      fprintf(stderr, "Read error");
+      return 1;
+    }
+    if (decoderSpec->SetDecoderProperties2(properties, kPropertiesSize) != S_OK)
     {
       fprintf(stderr, "SetDecoderProperties error");
       return 1;
@@ -369,7 +377,6 @@ int main2(int n, const char *args[])
     for (int i = 0; i < 8; i++)
     {
       Byte b;
-      UInt32 processedSize;
       if (inStream->Read(&b, sizeof(b), &processedSize) != S_OK)
       {
         fprintf(stderr, "Read error");
