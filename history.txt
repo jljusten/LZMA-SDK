@@ -1,0 +1,19 @@
+HISTORY of the LZMA SDK
+-----------------------
+
+  Version 4.01                2004-02-15
+  --------------------------------------
+    - Some detection of data corruption was enabled.
+        LzmaDecode.c / RangeDecoderReadByte
+        .....
+        {
+          rd->ExtraBytes = 1;
+          return 0xFF;
+        }
+
+  Version 4.00                2004-02-13
+  --------------------------------------
+    - Original version
+
+
+End of document

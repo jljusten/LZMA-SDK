@@ -1,7 +1,7 @@
 /*
 LzmaDecode.c
-LZMA Decoder in interface
-LZMA SDK 4.00 Copyright (c) 1999-2004 Igor Pavlov (2004-01-29)
+LZMA Decoder
+LZMA SDK 4.01 Copyright (c) 1999-2004 Igor Pavlov (2004-02-15)
 */
 
 #include "LzmaDecode.h"
@@ -41,8 +41,8 @@ Byte RangeDecoderReadByte(CRangeDecoder *rd)
     if (size == 0)
     #endif
     {
-      return 0xFF;
       rd->ExtraBytes = 1;
+      return 0xFF;
     }
   }
   return (*rd->Buffer++);

@@ -1,7 +1,7 @@
 /* 
 LzmaDecode.h
-LZMA Decoder in interface
-LZMA SDK 4.00 Copyright (c) 1999-2004 Igor Pavlov (2004-01-29)
+LZMA Decoder interface
+LZMA SDK 4.01 Copyright (c) 1999-2004 Igor Pavlov (2004-02-15)
 */
 
 #ifndef __LZMADECODE_H
