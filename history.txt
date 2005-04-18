@@ -1,6 +1,17 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  Version 4.17                2005-04-18
+  --------------------------------------
+    - New example for RAM->RAM compressing/decompressing: 
+      LZMA + BCJ (filter for x86 code):
+        - LzmaRam.h
+        - LzmaRam.cpp
+        - LzmaRamDecode.h
+        - LzmaRamDecode.c
+        - -f86 switch for lzma.exe
+
+  
   Version 4.16                2005-03-29
   --------------------------------------
     - Bug was fixed in LzmaDecode.c (ANSI-C LZMA Decoder): 
