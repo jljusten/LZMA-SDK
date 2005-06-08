@@ -384,7 +384,7 @@ STDMETHODIMP CEncoder::SetCoderProperties(const PROPID *propIDs,
         if (prop.vt != VT_UI4)
           return E_INVALIDARG;
         UInt32 numFastBytes = prop.ulVal;
-        if(numFastBytes < 2 || numFastBytes > kMatchMaxLen)
+        if(numFastBytes < 5 || numFastBytes > kMatchMaxLen)
           return E_INVALIDARG;
         _numFastBytes = numFastBytes;
         break;

@@ -1,6 +1,16 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  Version 4.21                2005-06-08
+  --------------------------------------
+    - Interfaces for ANSI-C LZMA Decoder (LzmaDecode.c) were changed
+    - New additional version of ANSI-C LZMA Decoder with zlib-like interface:
+        - LzmaStateDecode.h
+        - LzmaStateDecode.c
+        - LzmaStateTest.c
+    - ANSI-C LZMA Decoder now can decompress files larger than 4 GB
+
+  
   Version 4.17                2005-04-18
   --------------------------------------
     - New example for RAM->RAM compressing/decompressing: 
