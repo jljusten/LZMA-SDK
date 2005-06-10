@@ -1,7 +1,7 @@
-LZMA SDK 4.21
+LZMA SDK 4.22
 -------------
 
-LZMA SDK 4.21  Copyright (C) 1999-2005 Igor Pavlov
+LZMA SDK 4.22  Copyright (C) 1999-2005 Igor Pavlov
 
 LZMA SDK provides developers with documentation, source code,
 and sample code necessary to write software that uses LZMA compression. 
@@ -553,6 +553,13 @@ Interface:
 
 6) Free all allocated blocks
 
+
+Note
+----
+LzmaDecodeSize.c is size-optimized version of LzmaDecode.c.
+But compiled code of LzmaDecodeSize.c can be larger than 
+compiled code of LzmaDecode.c. So it's better to use 
+LzmaDecode.c in most cases.
 
 
 EXIT codes

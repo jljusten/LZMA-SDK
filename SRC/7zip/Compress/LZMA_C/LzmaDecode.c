@@ -2,7 +2,7 @@
   LzmaDecode.c
   LZMA Decoder (optimized for Speed version)
   
-  LZMA SDK 4.21 Copyright (c) 1999-2005 Igor Pavlov (2005-06-08)
+  LZMA SDK 4.22 Copyright (c) 1999-2005 Igor Pavlov (2005-06-10)
   http://www.7-zip.org/
 
   LZMA SDK is licensed under two licenses:
@@ -566,7 +566,7 @@ int LzmaDecode(CLzmaDecoderState *vs,
   vs->Range = Range;
   vs->Code = Code;
   vs->DictionaryPos = dictionaryPos;
-  vs->GlobalPos = globalPos + nowPos;
+  vs->GlobalPos = globalPos + (UInt32)nowPos;
   vs->DistanceLimit = distanceLimit;
   vs->Reps[0] = rep0;
   vs->Reps[1] = rep1;

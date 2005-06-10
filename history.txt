@@ -1,6 +1,11 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  Version 4.22                2005-06-10
+  --------------------------------------
+    - Small fixes
+
+
   Version 4.21                2005-06-08
   --------------------------------------
     - Interfaces for ANSI-C LZMA Decoder (LzmaDecode.c) were changed

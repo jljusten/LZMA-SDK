@@ -113,6 +113,16 @@ SZ_RESULT SzDecode(const CFileSize *packSizes, const CFolder *folder,
     if (state.Probs == 0)
       return SZE_OUTOFMEMORY;
 
+    #ifdef _LZMA_OUT_READ
+    state.Dictionary = (unsigned char *)allocMain->Alloc(state.Properties.DictionarySize);
+    if (state.Dictionary == 0)
+    {
+      allocMain->Free(state.Probs);
+      return SZE_OUTOFMEMORY;
+    }
+    LzmaDecoderInit(&state);
+    #endif
+
     result = LzmaDecode(&state,
         #ifdef _LZMA_IN_CB
         &lzmaCallback.InCallback,
@@ -122,6 +132,9 @@ SZ_RESULT SzDecode(const CFileSize *packSizes, const CFolder *folder,
         outBuffer, (SizeT)outSize, &outSizeProcessedLoc);
     *outSizeProcessed = (size_t)outSizeProcessedLoc;
     allocMain->Free(state.Probs);
+    #ifdef _LZMA_OUT_READ
+    allocMain->Free(state.Dictionary);
+    #endif
     if (result == LZMA_RESULT_DATA_ERROR)
       return SZE_DATA_ERROR;
     if (result != LZMA_RESULT_OK)

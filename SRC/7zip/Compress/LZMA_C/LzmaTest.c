@@ -3,7 +3,7 @@ LzmaTest.c
 Test application for LZMA Decoder
 
 This file written and distributed to public domain by Igor Pavlov.
-This file is part of LZMA SDK 4.21 (2005-06-08)
+This file is part of LZMA SDK 4.22 (2005-06-10)
 */
 
 #include <stdio.h>
@@ -230,7 +230,7 @@ int main3(FILE *inFile, FILE *outFile, char *rs)
         
       if (outSize < outProcessed)
         outSizeHigh--;
-      outSize -= outProcessed;
+      outSize -= (UInt32)outProcessed;
       outSize &= 0xFFFFFFFF;
         
       if (outProcessed == 0)
