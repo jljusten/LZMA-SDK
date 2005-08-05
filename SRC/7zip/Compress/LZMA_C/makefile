@@ -1,4 +1,4 @@
-PROG = 7zDec.exe
+PROG = lzmaDec.exe
 
 !IFNDEF O
 !IFDEF CPU
@@ -21,20 +21,8 @@ COMPL_O2   = $(CPP) $(CFLAGS_O2) $**
 COMPL      = $(CPP) $(CFLAGS_O1) $**
 
 
-7Z_OBJS = \
-  $O\7zAlloc.obj \
-  $O\7zBuffer.obj \
-  $O\7zCrc.obj \
-  $O\7zDecode.obj \
-  $O\7zExtract.obj \
-  $O\7zHeader.obj \
-  $O\7zIn.obj \
-  $O\7zItem.obj \
-  $O\7zMain.obj \
-  $O\7zMethodID.obj \
-
 OBJS = \
-  $(7Z_OBJS) \
+  $O\LzmaTest.obj \
   $O\LzmaDecode.obj \
 
 all: $(PROGPATH) 
@@ -49,7 +37,7 @@ $(PROGPATH): $O $(OBJS)
 	link $(LFLAGS) -out:$(PROGPATH) $(OBJS) $(LIBS)
 
 
-$(7Z_OBJS): $(*B).c
+$O\LzmaTest.obj: $(*B).c
 	$(COMPL)
 $O\LzmaDecode.obj: ../../Compress/LZMA_C/$(*B).c
 	$(COMPL_O2)

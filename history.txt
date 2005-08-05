@@ -1,6 +1,13 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  Version 4.26                2005-08-05
+  --------------------------------------
+    - Fixes in 7z_C code and LzmaTest.c:
+      previous versions could work incorrectly,
+      if malloc(0) returns 0
+
+
   Version 4.23                2005-06-29
   --------------------------------------
     - Small fixes in C++ code
