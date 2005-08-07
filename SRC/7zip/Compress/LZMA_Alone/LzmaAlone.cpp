@@ -131,7 +131,7 @@ static bool GetNumber(const wchar_t *s, UInt32 &value)
 
 int main2(int n, const char *args[])
 {
-  fprintf(stderr, "\nLZMA 4.26 Copyright (c) 1999-2005 Igor Pavlov  2005-08-02\n");
+  fprintf(stderr, "\nLZMA 4.27 Copyright (c) 1999-2005 Igor Pavlov  2005-08-07\n");
 
   if (n == 1)
   {

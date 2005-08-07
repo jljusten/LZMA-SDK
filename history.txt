@@ -1,6 +1,13 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  Version 4.27                2005-08-07
+  --------------------------------------
+    - Bug in LzmaDecodeSize.c was fixed:
+       if _LZMA_IN_CB and _LZMA_OUT_READ were defined,
+       decompressing worked incorrectly.
+
+
   Version 4.26                2005-08-05
   --------------------------------------
     - Fixes in 7z_C code and LzmaTest.c:
