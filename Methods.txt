@@ -61,8 +61,8 @@ List of defined IDs
       02 - Arj 4
    05 - Z
    06 - Lzh
-
-   07 - Reserved
+   07 - Reserved for 7z
+   08 - Cab
 
 
 06 - Crypto 

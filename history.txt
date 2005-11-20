@@ -1,6 +1,26 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  Version 4.30                2005-11-20
+  --------------------------------------
+    - Compression ratio was improved in -a2 mode
+    - Speed optimizations for compressing in -a2 mode
+    - -fb switch now supports values up to 273
+    - Bug in 7z_C (7zIn.c) was fixed:
+      It used Alloc/Free functions from different memory pools.
+      So if program used two memory pools, it worked incorrectly.
+    - 7z_C: .7z format supporting was improved
+    - LZMA# SDK (C#.NET version) was included to LZMA SDK
+
+
+  Version 4.27 (Updated)      2005-09-21
+  --------------------------------------
+   - Some GUIDs/interfaces in C++ were changed.
+     IStream.h:
+       ISequentialInStream::Read now works as old ReadPart
+       ISequentialOutStream::Write now works as old WritePart
+
+  
   Version 4.27                2005-08-07
   --------------------------------------
     - Bug in LzmaDecodeSize.c was fixed:
