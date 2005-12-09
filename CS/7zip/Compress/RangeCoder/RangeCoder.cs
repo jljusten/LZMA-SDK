@@ -4,15 +4,13 @@ namespace SevenZip.Compression.RangeCoder
 {
 	class Encoder
 	{
-		const int kNumTopBits = 24;
-		public const uint kTopValue = (1 << kNumTopBits);
+		public const uint kTopValue = (1 << 24);
 
 		System.IO.Stream Stream;
-		// Buffer.OutBuffer Stream = new Buffer.OutBuffer(1 << 20);
 
 		public UInt64 Low;
 		public uint Range;
-		uint _ffNum;
+		uint _cacheSize;
 		byte _cache;
 
 		long StartPosition;
@@ -20,23 +18,20 @@ namespace SevenZip.Compression.RangeCoder
 		public void SetStream(System.IO.Stream stream)
 		{
 			Stream = stream;
-			// Stream.SetStream(stream);
 		}
 
 		public void ReleaseStream()
 		{
 			Stream = null;
-			// Stream.ReleaseStream();
 		}
 
 		public void Init()
 		{
-			// Stream.Init();
 			StartPosition = Stream.Position;
 
 			Low = 0;
 			Range = 0xFFFFFFFF;
-			_ffNum = 0;
+			_cacheSize = 1;
 			_cache = 0;
 		}
 
@@ -44,19 +39,16 @@ namespace SevenZip.Compression.RangeCoder
 		{
 			for (int i = 0; i < 5; i++)
 				ShiftLow();
-			// Stream.FlushData();
 		}
 
 		public void FlushStream()
 		{
 			Stream.Flush();
-			// Stream.FlushStream();
 		}
 
 		public void CloseStream()
 		{
 			Stream.Close();
-			// Stream.CloseStream();
 		}
 
 		public void Encode(uint start, uint size, uint total)
@@ -72,15 +64,18 @@ namespace SevenZip.Compression.RangeCoder
 
 		public void ShiftLow()
 		{
-			if (Low < (uint)0xFF000000 || (uint)(Low >> 32) == 1)
+			if ((uint)Low < (uint)0xFF000000 || (uint)(Low >> 32) == 1)
 			{
-				Stream.WriteByte((byte)(_cache + (Low >> 32)));
-				for (; _ffNum != 0; _ffNum--)
-					Stream.WriteByte((byte)(0xFF + (Low >> 32)));
+				byte temp = _cache;
+				do
+				{
+					Stream.WriteByte((byte)(temp + (Low >> 32)));
+					temp = 0xFF;
+				}
+				while (--_cacheSize != 0);
 				_cache = (byte)(((uint)Low) >> 24);
 			}
-			else
-				_ffNum++;
+			_cacheSize++;
 			Low = ((uint)Low) << 8;
 		}
 
@@ -118,16 +113,15 @@ namespace SevenZip.Compression.RangeCoder
 
 		public long GetProcessedSizeAdd()
 		{
-			return _ffNum +
-				Stream.Position - StartPosition;
+			return _cacheSize +
+				Stream.Position - StartPosition + 4;
 			// (long)Stream.GetProcessedSize();
 		}
 	}
 
 	class Decoder
 	{
-		const int kNumTopBits = 24;
-		public const uint kTopValue = (1 << kNumTopBits);
+		public const uint kTopValue = (1 << 24);
 		public uint Range;
 		public uint Code;
 		// public Buffer.InBuffer Stream = new Buffer.InBuffer(1 << 16);

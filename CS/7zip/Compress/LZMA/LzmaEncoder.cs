@@ -560,6 +560,9 @@ namespace SevenZip.Compression.LZMA
 		}
 
 
+		UInt32[] reps = new UInt32[Base.kNumRepDistances];
+		UInt32[] repLens = new UInt32[Base.kNumRepDistances];
+
 		UInt32 GetOptimum(UInt32 position, out UInt32 backRes)
 		{
 			if (_optimumEndIndex != _optimumCurrentIndex)
@@ -583,8 +586,6 @@ namespace SevenZip.Compression.LZMA
 				_longestMatchWasFound = false;
 			}
 
-			UInt32[] reps = new UInt32[Base.kNumRepDistances];
-			UInt32[] repLens = new UInt32[Base.kNumRepDistances];
 			UInt32 repMaxIndex = 0;
 			UInt32 i;
 			for (i = 0; i < Base.kNumRepDistances; i++)
@@ -1060,7 +1061,6 @@ namespace SevenZip.Compression.LZMA
 				lenMain = _longestMatchLength;
 				_longestMatchWasFound = false;
 			}
-			UInt32[] repLens = new UInt32[Base.kNumRepDistances];
 			UInt32 repMaxIndex = 0;
 			for (UInt32 i = 0; i < Base.kNumRepDistances; i++)
 			{
@@ -1113,7 +1113,7 @@ namespace SevenZip.Compression.LZMA
 					_longestMatchLength == lenMain + 1 &&
 					!ChangePair(backMain, _matchDistances[_longestMatchLength]) ||
 					_longestMatchLength > lenMain + 1 ||
-					_longestMatchLength + 1 >= lenMain &&
+					_longestMatchLength + 1 >= lenMain && lenMain >= 3 &&
 					ChangePair(_matchDistances[lenMain - 1], backMain)
 					)
 					)
@@ -1527,10 +1527,11 @@ namespace SevenZip.Compression.LZMA
 			}
 		}
 
+		const int kPropSize = 5;
+		Byte[] properties = new Byte[kPropSize];
+
 		public void WriteCoderProperties(System.IO.Stream outStream)
 		{
-			const int kPropSize = 5;
-			Byte[] properties = new Byte[kPropSize];
 			properties[0] = (Byte)((_posStateBits * 5 + _numLiteralPosStateBits) * 9 + _numLiteralContextBits);
 			for (int i = 0; i < 4; i++)
 				properties[1 + i] = (Byte)(_dictionarySize >> (8 * i));

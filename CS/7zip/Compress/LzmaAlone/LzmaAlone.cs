@@ -34,10 +34,10 @@ namespace SevenZip
 				"  -lc{N}: set number of literal context bits - [0, 8], default: 3\n" +
 				"  -lp{N}: set number of literal pos bits - [0, 4], default: 0\n" +
 				"  -pb{N}: set number of pos bits - [0, 4], default: 2\n" +
-				"  -mf{MF_ID}: set Match Finder: [bt2, bt4, bt4b, default: bt4\n" +
+				"  -mf{MF_ID}: set Match Finder: [bt2, bt4, bt4b], default: bt4\n" +
 				"  -eos:   write End Of Stream marker\n"
-				// + "  -si:    Read data from stdin\n"
-				// + "  -so:    Write data to stdout\n"
+				// + "  -si:    read data from stdin\n"
+				// + "  -so:    write data to stdout\n"
 				);
 		}
 
@@ -63,7 +63,7 @@ namespace SevenZip
 		}
 		static int Main2(string[] args)
 		{
-			System.Console.WriteLine("\nLZMA# 4.30 Copyright (c) 1999-2005 Igor Pavlov  2005-11-20\n");
+			System.Console.WriteLine("\nLZMA# 4.32 Copyright (c) 1999-2005 Igor Pavlov  2005-12-09\n");
 
 			if (args.Length == 0)
 			{
