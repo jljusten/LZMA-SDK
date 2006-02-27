@@ -28,13 +28,13 @@ namespace SevenZip
 				"  d: decode file\n" +
 				"  b: Benchmark\n" +
 				"<Switches>\n" +
-				"  -a{N}:  set compression mode - [0, 2], default: 2 (max)\n" +
-				"  -d{N}:  set dictionary - [0,28], default: 23 (8MB)\n" +
+				// "  -a{N}:  set compression mode - [0, 1], default: 1 (max)\n" +
+				"  -d{N}:  set dictionary - [0, 29], default: 23 (8MB)\n" +
 				"  -fb{N}: set number of fast bytes - [5, 273], default: 128\n" +
 				"  -lc{N}: set number of literal context bits - [0, 8], default: 3\n" +
 				"  -lp{N}: set number of literal pos bits - [0, 4], default: 0\n" +
 				"  -pb{N}: set number of pos bits - [0, 4], default: 2\n" +
-				"  -mf{MF_ID}: set Match Finder: [bt2, bt4, bt4b], default: bt4\n" +
+				"  -mf{MF_ID}: set Match Finder: [bt2, bt4], default: bt4\n" +
 				"  -eos:   write End Of Stream marker\n"
 				// + "  -si:    read data from stdin\n"
 				// + "  -so:    write data to stdout\n"
@@ -63,7 +63,7 @@ namespace SevenZip
 		}
 		static int Main2(string[] args)
 		{
-			System.Console.WriteLine("\nLZMA# 4.32 Copyright (c) 1999-2005 Igor Pavlov  2005-12-09\n");
+			System.Console.WriteLine("\nLZMA# 4.33 Copyright (c) 1999-2006 Igor Pavlov  2006-02-06\n");
 
 			if (args.Length == 0)
 			{
@@ -133,7 +133,7 @@ namespace SevenZip
 				if (paramIndex < nonSwitchStrings.Count)
 					if (!GetNumber((string)nonSwitchStrings[paramIndex++], out numIterations))
 						numIterations = kNumDefaultItereations;
-				return LzmaBench.LzmaBenchmark(numIterations, (UInt32)dictionary, mf == "bt4");
+				return LzmaBench.LzmaBenchmark(numIterations, (UInt32)dictionary);
 			}
 
 			bool encodeMode = false;

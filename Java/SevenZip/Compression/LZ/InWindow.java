@@ -1,4 +1,4 @@
-// LZ.InWindows
+// LZ.InWindow
 
 package SevenZip.Compression.LZ;
 
@@ -19,12 +19,15 @@ public class InWindow
 	public int _pos;             // offset (from _buffer) of curent byte
 	int _keepSizeBefore;  // how many BYTEs must be kept in buffer before _pos
 	int _keepSizeAfter;   // how many BYTEs must be kept buffer after _pos
-	int _keepSizeReserv;  // how many BYTEs must be kept as reserv
 	public int _streamPos;   // offset (from _buffer) of first not read byte from Stream
 	
 	public void MoveBlock()
 	{
 		int offset = _bufferOffset + _pos - _keepSizeBefore;
+		// we need one additional byte, since MovePos moves on 1 byte.
+		if (offset > 0)
+			offset--;
+
 		int numBytes = _bufferOffset + _streamPos - offset;
 		
 		// check negative offset ????
@@ -59,14 +62,12 @@ public class InWindow
 		}
 	}
 	
-	void Free()
-	{ _bufferBase = null; }
+	void Free() { _bufferBase = null; }
 	
 	public void Create(int keepSizeBefore, int keepSizeAfter, int keepSizeReserv)
 	{
 		_keepSizeBefore = keepSizeBefore;
 		_keepSizeAfter = keepSizeAfter;
-		_keepSizeReserv = keepSizeReserv;
 		int blockSize = keepSizeBefore + keepSizeAfter + keepSizeReserv;
 		if (_bufferBase == null || _blockSize != blockSize)
 		{
@@ -77,11 +78,8 @@ public class InWindow
 		_pointerToLastSafePosition = _blockSize - keepSizeAfter;
 	}
 	
-	public void SetStream(java.io.InputStream stream)
-	{ _stream = stream; 	}
-
-	public void ReleaseStream()
-	{ _stream = null; }
+	public void SetStream(java.io.InputStream stream) { _stream = stream; 	}
+	public void ReleaseStream() { _stream = null; }
 
 	public void Init() throws IOException
 	{
@@ -104,8 +102,7 @@ public class InWindow
 		}
 	}
 	
-	public byte GetIndexByte(int index)
-	{ return _bufferBase[_bufferOffset + _pos + index]; }
+	public byte GetIndexByte(int index)	{ return _bufferBase[_bufferOffset + _pos + index]; }
 	
 	// index + limit have not to exceed _keepSizeAfter;
 	public int GetMatchLen(int index, int distance, int limit)
@@ -122,8 +119,7 @@ public class InWindow
 		return i;
 	}
 	
-	public int GetNumAvailableBytes()
-	{ return _streamPos - _pos; }
+	public int GetNumAvailableBytes()	{ return _streamPos - _pos; }
 	
 	public void ReduceOffsets(int subValue)
 	{

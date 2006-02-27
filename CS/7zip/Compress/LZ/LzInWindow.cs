@@ -8,34 +8,32 @@ namespace SevenZip.Compression.LZ
 	{
 		public Byte[] _bufferBase = null; // pointer to buffer with data
 		System.IO.Stream _stream;
-		UInt32 _posLimit;  // offset (from _buffer) of first byte when new block reading must be done
+		UInt32 _posLimit; // offset (from _buffer) of first byte when new block reading must be done
 		bool _streamEndWasReached; // if (true) then _streamPos shows real end of stream
 
 		UInt32 _pointerToLastSafePosition;
 
 		public UInt32 _bufferOffset;
 
-		public UInt32 _blockSize;  // Size of Allocated memory block
-		public UInt32 _pos;             // offset (from _buffer) of curent byte
-		UInt32 _keepSizeBefore;  // how many BYTEs must be kept in buffer before _pos
-		UInt32 _keepSizeAfter;   // how many BYTEs must be kept buffer after _pos
-		UInt32 _keepSizeReserv;  // how many BYTEs must be kept as reserv
-		public UInt32 _streamPos;   // offset (from _buffer) of first not read byte from Stream
-
-		public virtual void BeforeMoveBlock() { }
-		public virtual void AfterMoveBlock() { }
+		public UInt32 _blockSize; // Size of Allocated memory block
+		public UInt32 _pos; // offset (from _buffer) of curent byte
+		UInt32 _keepSizeBefore; // how many BYTEs must be kept in buffer before _pos
+		UInt32 _keepSizeAfter; // how many BYTEs must be kept buffer after _pos
+		public UInt32 _streamPos; // offset (from _buffer) of first not read byte from Stream
 
 		public void MoveBlock()
 		{
-			BeforeMoveBlock();
 			UInt32 offset = (UInt32)(_bufferOffset) + _pos - _keepSizeBefore;
+			// we need one additional byte, since MovePos moves on 1 byte.
+			if (offset > 0)
+				offset--;
+			
 			UInt32 numBytes = (UInt32)(_bufferOffset) + _streamPos - offset;
 
 			// check negative offset ????
 			for (UInt32 i = 0; i < numBytes; i++)
 				_bufferBase[i] = _bufferBase[offset + i];
 			_bufferOffset -= offset;
-			AfterMoveBlock();
 		}
 
 		public virtual void ReadBlock()
@@ -70,7 +68,6 @@ namespace SevenZip.Compression.LZ
 		{
 			_keepSizeBefore = keepSizeBefore;
 			_keepSizeAfter = keepSizeAfter;
-			_keepSizeReserv = keepSizeReserv;
 			UInt32 blockSize = keepSizeBefore + keepSizeAfter + keepSizeReserv;
 			if (_bufferBase == null || _blockSize != blockSize)
 			{
@@ -81,17 +78,17 @@ namespace SevenZip.Compression.LZ
 			_pointerToLastSafePosition = _blockSize - keepSizeAfter;
 		}
 
-		public void Init(System.IO.Stream stream)
+		public void SetStream(System.IO.Stream stream) { _stream = stream; }
+		public void ReleaseStream() { _stream = null; }
+
+		public void Init()
 		{
-			_stream = stream;
 			_bufferOffset = 0;
 			_pos = 0;
 			_streamPos = 0;
 			_streamEndWasReached = false;
 			ReadBlock();
 		}
-
-		public void ReleaseStream() { _stream = null; }
 
 		public void MovePos()
 		{
@@ -118,7 +115,7 @@ namespace SevenZip.Compression.LZ
 			UInt32 pby = _bufferOffset + _pos + (UInt32)index;
 
 			UInt32 i;
-			for (i = 0; i < limit && _bufferBase[pby + i] == _bufferBase[pby + i - distance]; i++) ;
+			for (i = 0; i < limit && _bufferBase[pby + i] == _bufferBase[pby + i - distance]; i++);
 			return i;
 		}
 

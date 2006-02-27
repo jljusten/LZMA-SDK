@@ -367,8 +367,8 @@ namespace SevenZip.Compression.LZMA
 		public override bool CanRead { get { return true; }}
 		public override bool CanWrite { get { return true; }}
 		public override bool CanSeek { get { return true; }}
-		public override long Length { get  { return 0; }}
-		public override long Position  
+		public override long Length { get { return 0; }}
+		public override long Position
 		{
 			get { return 0;	}
 			set { }

@@ -25,13 +25,13 @@ namespace SevenZip.Compression.LZMA
 			public void UpdateMatch() { Index = (uint)(Index < 7 ? 7 : 10); }
 			public void UpdateRep() { Index = (uint)(Index < 7 ? 8 : 11); }
 			public void UpdateShortRep() { Index = (uint)(Index < 7 ? 9 : 11); }
-		  public bool IsCharState() { return Index < 7; }
+			public bool IsCharState() { return Index < 7; }
 		}
 
 		public const int kNumPosSlotBits = 6;
 		public const int kDicLogSizeMin = 0;
-		public const int kDicLogSizeMax = 28;
-		public const uint kDistTableSizeMax = kDicLogSizeMax * 2;
+		// public const int kDicLogSizeMax = 30;
+		// public const uint kDistTableSizeMax = kDicLogSizeMax * 2;
 
 		public const int kNumLenToPosStatesBits = 2; // it's for speed optimization
 		public const uint kNumLenToPosStates = 1 << kNumLenToPosStatesBits;

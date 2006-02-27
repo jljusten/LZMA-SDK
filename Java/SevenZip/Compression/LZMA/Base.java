@@ -43,8 +43,8 @@ public class Base
 	
 	public static final int kNumPosSlotBits = 6;
 	public static final int kDicLogSizeMin = 0;
-	public static final int kDicLogSizeMax = 28;
-	public static final int kDistTableSizeMax = kDicLogSizeMax * 2;
+	// public static final int kDicLogSizeMax = 28;
+	// public static final int kDistTableSizeMax = kDicLogSizeMax * 2;
 	
 	public static final int kNumLenToPosStatesBits = 2; // it's for speed optimization
 	public static final int kNumLenToPosStates = 1 << kNumLenToPosStatesBits;

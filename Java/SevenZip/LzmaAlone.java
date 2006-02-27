@@ -150,20 +150,20 @@ public class LzmaAlone
 				"  d: decode file\n" +
 				"  b: Benchmark\n" +
 				"<Switches>\n" +
-				"  -a{N}:  set compression mode - [0, 2], default: 2 (max)\n" +
+				// "  -a{N}:  set compression mode - [0, 1], default: 1 (max)\n" +
 				"  -d{N}:  set dictionary - [0,28], default: 23 (8MB)\n" +
 				"  -fb{N}: set number of fast bytes - [5, 273], default: 128\n" +
 				"  -lc{N}: set number of literal context bits - [0, 8], default: 3\n" +
 				"  -lp{N}: set number of literal pos bits - [0, 4], default: 0\n" +
 				"  -pb{N}: set number of pos bits - [0, 4], default: 2\n" +
-				"  -mf{MF_ID}: set Match Finder: [bt2, bt4, bt4b], default: bt4\n" +
+				"  -mf{MF_ID}: set Match Finder: [bt2, bt4], default: bt4\n" +
 				"  -eos:   write End Of Stream marker\n"
 				);
 	}
 	
 	public static void main(String[] args) throws Exception
 	{
-		System.out.println("\nLZMA (Java) 4.32 Copyright (c) 1999-2005 Igor Pavlov  2005-12-09\n");
+		System.out.println("\nLZMA (Java) 4.33 Copyright (c) 1999-2006 Igor Pavlov  2006-02-05\n");
 		
 		if (args.length < 1)
 		{
@@ -185,7 +185,7 @@ public class LzmaAlone
 				dictionary = params.DictionarySize;
 			if (params.MatchFinder > 1)
 				throw new Exception("Unsupported match finder");
-			SevenZip.LzmaBench.LzmaBenchmark(params.NumBenchmarkPasses, dictionary, params.MatchFinder >= 1);
+			SevenZip.LzmaBench.LzmaBenchmark(params.NumBenchmarkPasses, dictionary);
 		}
 		else if (params.Command == CommandLine.kEncode || params.Command == CommandLine.kDecode)
 		{

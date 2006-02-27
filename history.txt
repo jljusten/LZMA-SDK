@@ -1,6 +1,12 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  Version 4.34 beta           2006-02-27
+  --------------------------------------
+    - Compressing speed and memory requirements for compressing were increased
+    - LZMA now can use only these match finders: HC4, BT2, BT3, BT4
+
+  
   Version 4.32                2005-12-09
   --------------------------------------
     - Java version of LZMA SDK was included

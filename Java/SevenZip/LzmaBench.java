@@ -13,15 +13,13 @@ public class LzmaBench
 	{
 		int A1;
 		int A2;
-		public CRandomGenerator()
-		{ Init(); }
-		public void Init()
-		{ A1 = 362436069; A2 = 521288629; }
+		public CRandomGenerator() { Init(); }
+		public void Init() { A1 = 362436069; A2 = 521288629; }
 		public int GetRnd()
 		{
 			return
-					((A1 = 36969 * (A1 & 0xffff) + (A1 >>> 16)) << 16) ^
-					((A2 = 18000 * (A2 & 0xffff) + (A2 >>> 16)));
+				((A1 = 36969 * (A1 & 0xffff) + (A1 >>> 16)) << 16) ^
+				((A2 = 18000 * (A2 & 0xffff) + (A2 >>> 16)));
 		}
 	};
 	
@@ -59,20 +57,24 @@ public class LzmaBench
 	{
 		CBitRandomGenerator RG = new CBitRandomGenerator();
 		int Pos;
+		int Rep0;
+
 		public int BufferSize;
 		public byte[] Buffer = null;
-		public CBenchRandomGenerator()
-		{ }
+
+		public CBenchRandomGenerator() { }
 		public void Init()
-		{ RG.Init(); }
+		{ 
+			RG.Init();
+			Rep0 = 1;
+		}
 		public void Set(int bufferSize)
 		{
 			Buffer = new byte[bufferSize];
 			Pos = 0;
 			BufferSize = bufferSize;
 		}
-		int GetRndBit()
-		{ return RG.GetRnd(1); }
+		int GetRndBit() { return RG.GetRnd(1); }
 		int GetLogRandBits(int numBits)
 		{
 			int len = RG.GetRnd(numBits);
@@ -84,14 +86,8 @@ public class LzmaBench
 				return GetLogRandBits(4);
 			return (GetLogRandBits(4) << 10) | RG.GetRnd(10);
 		}
-		int GetLen()
-		{
-			if (GetRndBit() == 0)
-				return RG.GetRnd(2);
-			if (GetRndBit() == 0)
-				return 4 + RG.GetRnd(3);
-			return 12 + RG.GetRnd(4);
-		}
+		int GetLen1() { return RG.GetRnd(1 + (int)RG.GetRnd(2)); }
+		int GetLen2() { return RG.GetRnd(2 + (int)RG.GetRnd(2)); }
 		public void Generate()
 		{
 			while (Pos < BufferSize)
@@ -100,13 +96,19 @@ public class LzmaBench
 					Buffer[Pos++] = (byte)(RG.GetRnd(8));
 				else
 				{
-					int offset = GetOffset();
-					while (offset >= Pos)
-						offset >>>= 1;
-					offset += 1;
-					int len = 2 + GetLen();
+					int len;
+					if (RG.GetRnd(3) == 0)
+						len = 1 + GetLen1();
+					else
+					{
+						do
+							Rep0 = GetOffset();
+						while (Rep0 >= Pos);
+						Rep0++;
+						len = 2 + GetLen2();
+					}
 					for (int i = 0; i < len && Pos < BufferSize; i++, Pos++)
-						Buffer[Pos] = Buffer[Pos - offset];
+						Buffer[Pos] = Buffer[Pos - Rep0];
 				}
 			}
 		}
@@ -234,38 +236,27 @@ public class LzmaBench
 		return value * freq / elTime;
 	}
 	
-	static long GetCompressRating(int dictionarySize, boolean isBT4, long elapsedTime, long size)
+	static long GetCompressRating(int dictionarySize, long elapsedTime, long size)
 	{
-		long numCommandsForOne;
-		if (isBT4)
-		{
-			long t = GetLogSize(dictionarySize) - (19 << kSubBits);
-			numCommandsForOne = 2000 + ((t * t * 68) >>> (2 * kSubBits));
-		}
-		else
-		{
-			long t = GetLogSize(dictionarySize) - (15 << kSubBits);
-			numCommandsForOne = 1500 + ((t * t * 41) >>> (2 * kSubBits));
-		}
+		long t = GetLogSize(dictionarySize) - (18 << kSubBits);
+		long numCommandsForOne = 1060 + ((t * t * 10) >> (2 * kSubBits));
 		long numCommands = (long)(size) * numCommandsForOne;
 		return MyMultDiv64(numCommands, elapsedTime);
 	}
 	
-	static long GetDecompressRating(long elapsedTime,
-			long outSize, long inSize)
+	static long GetDecompressRating(long elapsedTime, long outSize, long inSize)
 	{
-		long numCommands = inSize * 250 + outSize * 21;
+		long numCommands = inSize * 220 + outSize * 20;
 		return MyMultDiv64(numCommands, elapsedTime);
 	}
 	
 	static long GetTotalRating(
 			int dictionarySize,
-			boolean isBT4,
 			long elapsedTimeEn, long sizeEn,
 			long elapsedTimeDe,
 			long inSizeDe, long outSizeDe)
 	{
-		return (GetCompressRating(dictionarySize, isBT4, elapsedTimeEn, sizeEn) +
+		return (GetCompressRating(dictionarySize, elapsedTimeEn, sizeEn) +
 				GetDecompressRating(elapsedTimeDe, inSizeDe, outSizeDe)) / 2;
 	}
 	
@@ -286,7 +277,6 @@ public class LzmaBench
 	
 	static void PrintResults(
 			int dictionarySize,
-			boolean isBT4,
 			long elapsedTime,
 			long size,
 			boolean decompressMode, long secondSize)
@@ -298,20 +288,17 @@ public class LzmaBench
 		if (decompressMode)
 			rating = GetDecompressRating(elapsedTime, size, secondSize);
 		else
-			rating = GetCompressRating(dictionarySize, isBT4, elapsedTime, size);
+			rating = GetCompressRating(dictionarySize, elapsedTime, size);
 		PrintRating(rating);
 	}
 	
-	String bt2 = "BT2";
-	String bt4 = "BT4";
-	
-	static public int LzmaBenchmark(int numIterations, int dictionarySize, boolean isBT4) throws Exception
+	static public int LzmaBenchmark(int numIterations, int dictionarySize) throws Exception
 	{
 		if (numIterations <= 0)
 			return 0;
-		if (dictionarySize < (1 << 19) && isBT4 || dictionarySize < (1 << 15))
+		if (dictionarySize < (1 << 18))
 		{
-			System.out.println("\nError: dictionary size for benchmark must be >= 19 (512 KB)");
+			System.out.println("\nError: dictionary size for benchmark must be >= 18 (256 KB)");
 			return 1;
 		}
 		System.out.print("\n       Compressing                Decompressing\n\n");
@@ -319,12 +306,8 @@ public class LzmaBench
 		SevenZip.Compression.LZMA.Encoder encoder = new SevenZip.Compression.LZMA.Encoder();
 		SevenZip.Compression.LZMA.Decoder decoder = new SevenZip.Compression.LZMA.Decoder();
 		
-			if (!encoder.SetDictionarySize(dictionarySize))
+		if (!encoder.SetDictionarySize(dictionarySize))
 			throw new Exception("Incorrect dictionary size");
-		if (!encoder.SetMatchFinder(isBT4 ?
-			SevenZip.Compression.LZMA.Encoder.EMatchFinderTypeBT4:
-			SevenZip.Compression.LZMA.Encoder.EMatchFinderTypeBT2))
-			throw new Exception("Incorrect MatchFinder");
 		
 		int kBufferSize = dictionarySize + kAdditionalSize;
 		int kCompressedBufferSize = (kBufferSize / 2) + kCompressedAdditionalSize;
@@ -392,9 +375,9 @@ public class LzmaBench
 					throw (new Exception("CRC Error"));
 			}
 			long benchSize = kBufferSize - (long)progressInfo.InSize;
-			PrintResults(dictionarySize, isBT4, encodeTime, benchSize, false, 0);
+			PrintResults(dictionarySize, encodeTime, benchSize, false, 0);
 			System.out.print("     ");
-			PrintResults(dictionarySize, isBT4, decodeTime, kBufferSize, true, compressedSize);
+			PrintResults(dictionarySize, decodeTime, kBufferSize, true, compressedSize);
 			System.out.println();
 			
 			totalBenchSize += benchSize;
@@ -403,9 +386,9 @@ public class LzmaBench
 			totalCompressedSize += compressedSize;
 		}
 		System.out.println("---------------------------------------------------");
-		PrintResults(dictionarySize, isBT4, totalEncodeTime, totalBenchSize, false, 0);
+		PrintResults(dictionarySize, totalEncodeTime, totalBenchSize, false, 0);
 		System.out.print("     ");
-		PrintResults(dictionarySize, isBT4, totalDecodeTime,
+		PrintResults(dictionarySize, totalDecodeTime,
 				kBufferSize * (long)numIterations, true, totalCompressedSize);
 		System.out.println("    Average");
 		return 0;

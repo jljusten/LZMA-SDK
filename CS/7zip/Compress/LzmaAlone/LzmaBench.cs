@@ -62,10 +62,17 @@ namespace SevenZip
 		{
 			CBitRandomGenerator RG = new CBitRandomGenerator();
 			UInt32 Pos;
+			UInt32 Rep0;
+			
 			public UInt32 BufferSize;
 			public Byte[] Buffer = null;
+
 			public CBenchRandomGenerator() { }
-			public void Init() { RG.Init(); }
+			public void Init() 
+			{ 
+				RG.Init();
+				Rep0 = 1;
+			}
 			public void Set(UInt32 bufferSize)
 			{
 				Buffer = new Byte[bufferSize];
@@ -73,13 +80,6 @@ namespace SevenZip
 				BufferSize = bufferSize;
 			}
 			UInt32 GetRndBit() { return RG.GetRnd(1); }
-			/*
-			UInt32 GetLogRand(int maxLen)
-			{
-				UInt32 len = GetRnd() % (maxLen + 1);
-				return GetRnd() & ((1 << len) - 1);
-			}
-			*/
 			UInt32 GetLogRandBits(int numBits)
 			{
 				UInt32 len = RG.GetRnd(numBits);
@@ -91,29 +91,29 @@ namespace SevenZip
 					return GetLogRandBits(4);
 				return (GetLogRandBits(4) << 10) | RG.GetRnd(10);
 			}
-			UInt32 GetLen()
-			{
-				if (GetRndBit() == 0)
-					return RG.GetRnd(2);
-				if (GetRndBit() == 0)
-					return 4 + RG.GetRnd(3);
-				return 12 + RG.GetRnd(4);
-			}
+			UInt32 GetLen1() { return RG.GetRnd(1 + (int)RG.GetRnd(2)); }
+			UInt32 GetLen2() { return RG.GetRnd(2 + (int)RG.GetRnd(2)); }
 			public void Generate()
 			{
 				while (Pos < BufferSize)
 				{
 					if (GetRndBit() == 0 || Pos < 1)
-						Buffer[Pos++] = (Byte)(RG.GetRnd(8));
+						Buffer[Pos++] = (Byte)RG.GetRnd(8);
 					else
 					{
-						UInt32 offset = GetOffset();
-						while (offset >= Pos)
-							offset >>= 1;
-						offset += 1;
-						UInt32 len = 2 + GetLen();
+						UInt32 len;
+						if (RG.GetRnd(3) == 0)
+							len = 1 + GetLen1();
+						else
+						{
+							do
+								Rep0 = GetOffset();
+							while (Rep0 >= Pos);
+							Rep0++;
+							len = 2 + GetLen2();
+						}
 						for (UInt32 i = 0; i < len && Pos < BufferSize; i++, Pos++)
-							Buffer[Pos] = Buffer[Pos - offset];
+							Buffer[Pos] = Buffer[Pos - Rep0];
 					}
 				}
 			}
@@ -185,39 +185,27 @@ namespace SevenZip
 			return value * freq / elTime;
 		}
 
-		static UInt64 GetCompressRating(UInt32 dictionarySize, bool isBT4,
-			UInt64 elapsedTime, UInt64 size)
+		static UInt64 GetCompressRating(UInt32 dictionarySize, UInt64 elapsedTime, UInt64 size)
 		{
-			UInt64 numCommandsForOne;
-			if (isBT4)
-			{
-				UInt64 t = GetLogSize(dictionarySize) - (19 << kSubBits);
-				numCommandsForOne = 2000 + ((t * t * 68) >> (2 * kSubBits));
-			}
-			else
-			{
-				UInt64 t = GetLogSize(dictionarySize) - (15 << kSubBits);
-				numCommandsForOne = 1500 + ((t * t * 41) >> (2 * kSubBits));
-			}
+			UInt64 t = GetLogSize(dictionarySize) - (18 << kSubBits);
+			UInt64 numCommandsForOne = 1060 + ((t * t * 10) >> (2 * kSubBits));
 			UInt64 numCommands = (UInt64)(size) * numCommandsForOne;
 			return MyMultDiv64(numCommands, elapsedTime);
 		}
 
-		static UInt64 GetDecompressRating(UInt64 elapsedTime,
-			UInt64 outSize, UInt64 inSize)
+		static UInt64 GetDecompressRating(UInt64 elapsedTime, UInt64 outSize, UInt64 inSize)
 		{
-			UInt64 numCommands = inSize * 250 + outSize * 21;
+			UInt64 numCommands = inSize * 220 + outSize * 20;
 			return MyMultDiv64(numCommands, elapsedTime);
 		}
 
 		static UInt64 GetTotalRating(
 			UInt32 dictionarySize,
-			bool isBT4,
 			UInt64 elapsedTimeEn, UInt64 sizeEn,
 			UInt64 elapsedTimeDe,
 			UInt64 inSizeDe, UInt64 outSizeDe)
 		{
-			return (GetCompressRating(dictionarySize, isBT4, elapsedTimeEn, sizeEn) +
+			return (GetCompressRating(dictionarySize, elapsedTimeEn, sizeEn) +
 				GetDecompressRating(elapsedTimeDe, inSizeDe, outSizeDe)) / 2;
 		}
 
@@ -237,7 +225,6 @@ namespace SevenZip
 
 		static void PrintResults(
 			UInt32 dictionarySize,
-			bool isBT4,
 			UInt64 elapsedTime,
 			UInt64 size,
 			bool decompressMode, UInt64 secondSize)
@@ -249,18 +236,15 @@ namespace SevenZip
 			if (decompressMode)
 				rating = GetDecompressRating(elapsedTime, size, secondSize);
 			else
-				rating = GetCompressRating(dictionarySize, isBT4, elapsedTime, size);
+				rating = GetCompressRating(dictionarySize, elapsedTime, size);
 			PrintRating(rating);
 		}
 
-		const string bt2 = "BT2";
-		const string bt4 = "BT4";
-
-		static public int LzmaBenchmark(Int32 numIterations, UInt32 dictionarySize, bool isBT4)
+		static public int LzmaBenchmark(Int32 numIterations, UInt32 dictionarySize)
 		{
 			if (numIterations <= 0)
 				return 0;
-			if (dictionarySize < (1 << 19) && isBT4 || dictionarySize < (1 << 15))
+			if (dictionarySize < (1 << 18))
 			{
 				System.Console.WriteLine("\nError: dictionary size for benchmark must be >= 19 (512 KB)");
 				return 1;
@@ -274,12 +258,10 @@ namespace SevenZip
 			CoderPropID[] propIDs = 
 			{ 
 				CoderPropID.DictionarySize,
-				CoderPropID.MatchFinder  
 			};
 			object[] properties = 
 			{
 				(Int32)(dictionarySize),
-				isBT4 ? bt4: bt2
 			};
 
 			UInt32 kBufferSize = dictionarySize + kAdditionalSize;
@@ -339,9 +321,9 @@ namespace SevenZip
 						throw (new Exception("CRC Error"));
 				}
 				UInt64 benchSize = kBufferSize - (UInt64)progressInfo.InSize;
-				PrintResults(dictionarySize, isBT4, encodeTime, benchSize, false, 0);
+				PrintResults(dictionarySize, encodeTime, benchSize, false, 0);
 				System.Console.Write("     ");
-				PrintResults(dictionarySize, isBT4, decodeTime, kBufferSize, true, (ulong)compressedSize);
+				PrintResults(dictionarySize, decodeTime, kBufferSize, true, (ulong)compressedSize);
 				System.Console.WriteLine();
 
 				totalBenchSize += benchSize;
@@ -350,9 +332,9 @@ namespace SevenZip
 				totalCompressedSize += (ulong)compressedSize;
 			}
 			System.Console.WriteLine("---------------------------------------------------");
-			PrintResults(dictionarySize, isBT4, totalEncodeTime, totalBenchSize, false, 0);
+			PrintResults(dictionarySize, totalEncodeTime, totalBenchSize, false, 0);
 			System.Console.Write("     ");
-			PrintResults(dictionarySize, isBT4, totalDecodeTime,
+			PrintResults(dictionarySize, totalDecodeTime,
 					kBufferSize * (UInt64)numIterations, true, totalCompressedSize);
 			System.Console.WriteLine("    Average");
 			return 0;
