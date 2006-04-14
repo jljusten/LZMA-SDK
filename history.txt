@@ -1,6 +1,13 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  Version 4.39 beta           2006-04-14
+  --------------------------------------
+    - Bug in versions 4.33b:4.38b was fixed:
+      C++ version of LZMA encoder could not correctly compress 
+      files larger than 2 GB with HC4 match finder (-mfhc4).
+      
+
   Version 4.37 beta           2005-04-06
   --------------------------------------
     - Fixes in C++ code: code could no be compiled if _NO_EXCEPTIONS was defined. 
