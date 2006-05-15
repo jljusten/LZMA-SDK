@@ -1,4 +1,4 @@
-// BranchPPC.c
+/* BranchPPC.c */
 
 #include "BranchPPC.h"
 
@@ -7,11 +7,11 @@ UInt32 PPC_B_Convert(Byte *data, UInt32 size, UInt32 nowPos, int encoding)
   UInt32 i;
   for (i = 0; i + 4 <= size; i += 4)
   {
-    // PowerPC branch 6(48) 24(Offset) 1(Abs) 1(Link)
+    /* PowerPC branch 6(48) 24(Offset) 1(Abs) 1(Link) */
     if ((data[i] >> 2) == 0x12 && 
     (
       (data[i + 3] & 3) == 1 
-      // || (data[i+3] & 3) == 3
+      /* || (data[i+3] & 3) == 3 */
       )
     )
     {

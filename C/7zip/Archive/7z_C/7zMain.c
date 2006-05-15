@@ -1,7 +1,7 @@
 /* 
 7zMain.c
 Test application for 7z Decoder
-LZMA SDK 4.26 Copyright (c) 1999-2005 Igor Pavlov (2005-08-02)
+LZMA SDK 4.42 Copyright (c) 1999-2005 Igor Pavlov (2006-05-15)
 */
 
 #include <stdio.h>
@@ -71,7 +71,7 @@ int main(int numargs, char *args[])
   ISzAlloc allocImp;
   ISzAlloc allocTempImp;
 
-  printf("\n7z ANSI-C Decoder 4.30  Copyright (c) 1999-2005 Igor Pavlov  2005-11-20\n");
+  printf("\n7z ANSI-C Decoder 4.42  Copyright (c) 1999-2005 Igor Pavlov  2006-05-15\n");
   if (numargs == 1)
   {
     printf(
@@ -133,11 +133,13 @@ int main(int numargs, char *args[])
     {
       UInt32 i;
 
-      // if you need cache, use these 3 variables.
-      // if you use external function, you can make these variable as static.
-      UInt32 blockIndex = 0xFFFFFFFF; // it can have any value before first call (if outBuffer = 0) 
-      Byte *outBuffer = 0; // it must be 0 before first call for each new archive. 
-      size_t outBufferSize = 0;  // it can have any value before first call (if outBuffer = 0) 
+      /*
+      if you need cache, use these 3 variables.
+      if you use external function, you can make these variable as static.
+      */
+      UInt32 blockIndex = 0xFFFFFFFF; /* it can have any value before first call (if outBuffer = 0) */
+      Byte *outBuffer = 0; /* it must be 0 before first call for each new archive. */
+      size_t outBufferSize = 0;  /* it can have any value before first call (if outBuffer = 0) */
 
       printf("\n");
       for (i = 0; i < db.Database.NumFiles; i++)

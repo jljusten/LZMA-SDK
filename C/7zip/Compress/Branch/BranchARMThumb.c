@@ -1,4 +1,4 @@
-// BranchARMThumb.c
+/* BranchARMThumb.c */
 
 #include "BranchARMThumb.h"
 

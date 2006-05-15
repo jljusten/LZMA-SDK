@@ -63,11 +63,6 @@ public class LzmaBench
 		public byte[] Buffer = null;
 
 		public CBenchRandomGenerator() { }
-		public void Init()
-		{ 
-			RG.Init();
-			Rep0 = 1;
-		}
 		public void Set(int bufferSize)
 		{
 			Buffer = new byte[bufferSize];
@@ -90,6 +85,8 @@ public class LzmaBench
 		int GetLen2() { return RG.GetRnd(2 + (int)RG.GetRnd(2)); }
 		public void Generate()
 		{
+			RG.Init();
+			Rep0 = 1;
 			while (Pos < BufferSize)
 			{
 				if (GetRndBit() == 0 || Pos < 1)
@@ -319,7 +316,6 @@ public class LzmaBench
 		
 		CBenchRandomGenerator rg = new CBenchRandomGenerator();
 
-		rg.Init();
 		rg.Set(kBufferSize);
 		rg.Generate();
 		CRC crc = new CRC();

@@ -3,32 +3,25 @@
 #ifndef __COMMON_TYPES_H
 #define __COMMON_TYPES_H
 
-#ifndef UInt32
 #ifdef _LZMA_UINT32_IS_ULONG
-#define UInt32 unsigned long
+typedef unsigned long UInt32;
 #else
-#define UInt32 unsigned int
-#endif
-#endif
-
-#ifndef Byte
-#define Byte unsigned char
+typedef unsigned int UInt32;
 #endif
 
-#ifndef UInt16
-#define UInt16 unsigned short
-#endif
+typedef unsigned char Byte;
+typedef unsigned short UInt16;
 
 /* #define _SZ_NO_INT_64 */
 /* define it your compiler doesn't support long long int */
 
 #ifdef _SZ_NO_INT_64
-#define UInt64 unsigned long
+typedef unsigned long UInt64;
 #else
 #ifdef _MSC_VER
-#define UInt64 unsigned __int64
+typedef unsigned __int64 UInt64;
 #else
-#define UInt64 unsigned long long int
+typedef unsigned long long int UInt64;
 #endif
 #endif
 
@@ -38,9 +31,9 @@
 
 #ifndef CFileSize
 #ifdef _SZ_FILE_SIZE_64
-#define CFileSize UInt64
+typedef UInt64 CFileSize; 
 #else
-#define CFileSize UInt32
+typedef UInt32 CFileSize; 
 #endif
 #endif
 

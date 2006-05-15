@@ -68,11 +68,7 @@ namespace SevenZip
 			public Byte[] Buffer = null;
 
 			public CBenchRandomGenerator() { }
-			public void Init() 
-			{ 
-				RG.Init();
-				Rep0 = 1;
-			}
+
 			public void Set(UInt32 bufferSize)
 			{
 				Buffer = new Byte[bufferSize];
@@ -95,6 +91,8 @@ namespace SevenZip
 			UInt32 GetLen2() { return RG.GetRnd(2 + (int)RG.GetRnd(2)); }
 			public void Generate()
 			{
+				RG.Init();
+				Rep0 = 1;
 				while (Pos < BufferSize)
 				{
 					if (GetRndBit() == 0 || Pos < 1)
@@ -274,7 +272,6 @@ namespace SevenZip
 
 			CBenchRandomGenerator rg = new CBenchRandomGenerator();
 
-			rg.Init();
 			rg.Set(kBufferSize);
 			rg.Generate();
 			CRC crc = new CRC();

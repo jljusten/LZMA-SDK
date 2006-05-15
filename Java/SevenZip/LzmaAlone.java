@@ -163,7 +163,7 @@ public class LzmaAlone
 	
 	public static void main(String[] args) throws Exception
 	{
-		System.out.println("\nLZMA (Java) 4.33 Copyright (c) 1999-2006 Igor Pavlov  2006-02-05\n");
+		System.out.println("\nLZMA (Java) 4.42 Copyright (c) 1999-2006 Igor Pavlov  2006-05-15\n");
 		
 		if (args.length < 1)
 		{

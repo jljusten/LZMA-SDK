@@ -1,6 +1,11 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  Version 4.42                2006-05-15
+  --------------------------------------
+    - Small changes in .h files in ANSI-C version.
+      
+
   Version 4.39 beta           2006-04-14
   --------------------------------------
     - Bug in versions 4.33b:4.38b was fixed:

@@ -1,4 +1,4 @@
-// BranchARM.c
+/* BranchARM.c */
 
 #include "BranchARM.h"
 
