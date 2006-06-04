@@ -1,7 +1,7 @@
 /* 
 7zMain.c
 Test application for 7z Decoder
-LZMA SDK 4.42 Copyright (c) 1999-2005 Igor Pavlov (2006-05-15)
+LZMA SDK 4.43 Copyright (c) 1999-2006 Igor Pavlov (2006-06-04)
 */
 
 #include <stdio.h>
@@ -71,7 +71,7 @@ int main(int numargs, char *args[])
   ISzAlloc allocImp;
   ISzAlloc allocTempImp;
 
-  printf("\n7z ANSI-C Decoder 4.42  Copyright (c) 1999-2005 Igor Pavlov  2006-05-15\n");
+  printf("\n7z ANSI-C Decoder 4.43  Copyright (c) 1999-2006 Igor Pavlov  2006-06-04\n");
   if (numargs == 1)
   {
     printf(

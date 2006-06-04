@@ -93,6 +93,10 @@ SOURCE=..\..\Compress\LZMA_C\LzmaDecode.c
 
 SOURCE=..\..\Compress\LZMA_C\LzmaDecode.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\LZMA_C\LzmaTypes.h
+# End Source File
 # End Group
 # Begin Source File
 

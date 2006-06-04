@@ -220,7 +220,6 @@ void CEncoder::SetPrices(UInt32 posState, UInt32 numSymbols, UInt32 *prices) con
 }
 CEncoder::CEncoder():
   _numFastBytes(kNumFastBytesDefault),
-  _matchFinderCycles(0),
   _distTableSize(kDefaultDictionaryLogSize * 2),
   _posStateBits(2),
   _posStateMask(4 - 1),
@@ -229,12 +228,13 @@ CEncoder::CEncoder():
   _dictionarySize(1 << kDefaultDictionaryLogSize),
   _dictionarySizePrev(UInt32(-1)),
   _numFastBytesPrev(UInt32(-1)),
+  _matchFinderCycles(0),
   _matchFinderIndex(kBT4),
-  setMfPasses(0),
    #ifdef COMPRESS_MF_MT
   _multiThread(false),
    #endif
-  _writeEndMark(false)
+  _writeEndMark(false),
+  setMfPasses(0)
 {
   // _maxMode = false;
   _fastMode = false;
@@ -1185,7 +1185,7 @@ HRESULT CEncoder::GetOptimumFast(UInt32 position, UInt32 &backRes, UInt32 &lenRe
     return MovePos(lenMain - 1);
   }
 
-  UInt32 backMain;
+  UInt32 backMain = 0; // for GCC
   if (lenMain >= 2)
   {
     backMain = matchDistances[numDistancePairs - 1];
