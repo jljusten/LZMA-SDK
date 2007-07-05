@@ -3,6 +3,60 @@ using System.IO;
 namespace SevenZip
 {
 	using CommandLineParser;
+	
+	public class CDoubleStream: Stream
+	{
+		public System.IO.Stream s1;
+		public System.IO.Stream s2;
+		public int fileIndex;
+		public long skipSize;
+		
+		public override bool CanRead { get { return true; }}
+		public override bool CanWrite { get { return false; }}
+		public override bool CanSeek { get { return false; }}
+		public override long Length { get { return s1.Length + s2.Length - skipSize; } }
+		public override long Position
+		{
+			get { return 0;	}
+			set { }
+		}
+		public override void Flush() { }
+		public override int Read(byte[] buffer, int offset, int count) 
+		{
+			int numTotal = 0;
+			while (count > 0)
+			{
+				if (fileIndex == 0)
+				{
+					int num = s1.Read(buffer, offset, count);
+					offset += num;
+					count -= num;
+					numTotal += num;
+					if (num == 0)
+						fileIndex++;
+				}
+				if (fileIndex == 1)
+				{
+					numTotal += s2.Read(buffer, offset, count);
+					return numTotal;
+				}
+			}
+			return numTotal;
+		}
+		public override void Write(byte[] buffer, int offset, int count)
+		{
+			throw (new Exception("can't Write"));
+		}
+		public override long Seek(long offset, System.IO.SeekOrigin origin)
+		{
+			throw (new Exception("can't Seek"));
+		}
+		public override void SetLength(long value)
+		{
+			throw (new Exception("can't SetLength"));
+		}
+	}
+	
 	class LzmaAlone
 	{
 		enum Key
@@ -18,7 +72,8 @@ namespace SevenZip
 			MatchFinder,
 			EOS,
 			StdIn,
-			StdOut
+			StdOut,
+			Train
 		};
 
 		static void PrintHelp()
@@ -63,7 +118,7 @@ namespace SevenZip
 		}
 		static int Main2(string[] args)
 		{
-			System.Console.WriteLine("\nLZMA# 4.42 Copyright (c) 1999-2006 Igor Pavlov  2006-05-15\n");
+			System.Console.WriteLine("\nLZMA# 4.49 Copyright (c) 1999-2007 Igor Pavlov  2006-07-05\n");
 
 			if (args.Length == 0)
 			{
@@ -71,7 +126,7 @@ namespace SevenZip
 				return 0;
 			}
 
-			SwitchForm[] kSwitchForms = new SwitchForm[12];
+			SwitchForm[] kSwitchForms = new SwitchForm[13];
 			int sw = 0;
 			kSwitchForms[sw++] = new SwitchForm("?", SwitchType.Simple, false);
 			kSwitchForms[sw++] = new SwitchForm("H", SwitchType.Simple, false);
@@ -85,6 +140,7 @@ namespace SevenZip
 			kSwitchForms[sw++] = new SwitchForm("EOS", SwitchType.Simple, false);
 			kSwitchForms[sw++] = new SwitchForm("SI", SwitchType.Simple, false);
 			kSwitchForms[sw++] = new SwitchForm("SO", SwitchType.Simple, false);
+			kSwitchForms[sw++] = new SwitchForm("T", SwitchType.UnLimitedPostString, false, 1);
 
 
 			Parser parser = new Parser(sw);
@@ -136,6 +192,10 @@ namespace SevenZip
 				return LzmaBench.LzmaBenchmark(numIterations, (UInt32)dictionary);
 			}
 
+			string train = "";
+			if (parser[(int)Key.Train].ThereIs)
+				train = (string)parser[(int)Key.Train].PostStrings[0];
+
 			bool encodeMode = false;
 			if (command == "e")
 				encodeMode = true;
@@ -147,7 +207,7 @@ namespace SevenZip
 			bool stdInMode = parser[(int)Key.StdIn].ThereIs;
 			bool stdOutMode = parser[(int)Key.StdOut].ThereIs;
 
-			FileStream inStream = null;
+			Stream inStream = null;
 			if (stdInMode)
 			{
 				throw (new Exception("Not implemeted"));
@@ -172,6 +232,10 @@ namespace SevenZip
 				string outputName = (string)nonSwitchStrings[paramIndex++];
 				outStream = new FileStream(outputName, FileMode.Create, FileAccess.Write);
 			}
+
+			FileStream trainStream = null;
+			if (train.Length != 0)
+				trainStream = new FileStream(train, FileMode.Open, FileAccess.Read);
 
 			if (encodeMode)
 			{
@@ -238,6 +302,20 @@ namespace SevenZip
 					fileSize = inStream.Length;
 				for (int i = 0; i < 8; i++)
 					outStream.WriteByte((Byte)(fileSize >> (8 * i)));
+				if (trainStream != null)
+				{
+					CDoubleStream doubleStream = new CDoubleStream();
+					doubleStream.s1 = trainStream;
+					doubleStream.s2 = inStream;
+					doubleStream.fileIndex = 0;
+					inStream = doubleStream;
+					long trainFileSize = trainStream.Length;
+					doubleStream.skipSize = 0;
+					if (trainFileSize > dictionary)
+						doubleStream.skipSize = trainFileSize - dictionary;
+					trainStream.Seek(doubleStream.skipSize, SeekOrigin.Begin);
+					encoder.SetTrainSize((uint)(trainFileSize - doubleStream.skipSize));
+				}
 				encoder.Code(inStream, outStream, -1, -1, null);
 			}
 			else if (command == "d")
@@ -247,6 +325,11 @@ namespace SevenZip
 					throw (new Exception("input .lzma is too short"));
 				Compression.LZMA.Decoder decoder = new Compression.LZMA.Decoder();
 				decoder.SetDecoderProperties(properties);
+				if (trainStream != null)
+				{
+					if (!decoder.Train(trainStream))
+						throw (new Exception("can't train"));
+				}
 				long outSize = 0;
 				for (int i = 0; i < 8; i++)
 				{

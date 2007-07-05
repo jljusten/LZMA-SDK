@@ -194,10 +194,11 @@ namespace SevenZip.Compression.LZMA
 			m_PosStateMask = numPosStates - 1;
 		}
 
+		bool _solid = false;
 		void Init(System.IO.Stream inStream, System.IO.Stream outStream)
 		{
 			m_RangeDecoder.Init(inStream);
-			m_OutWindow.Init(outStream);
+			m_OutWindow.Init(outStream, _solid);
 
 			uint i;
 			for (i = 0; i < Base.kNumStates; i++)
@@ -329,7 +330,7 @@ namespace SevenZip.Compression.LZMA
 							else
 								rep0 = posSlot;
 						}
-						if (rep0 >= nowPos64 || rep0 >= m_DictionarySizeCheck)
+						if (rep0 >= m_OutWindow.TrainSize + nowPos64 || rep0 >= m_DictionarySizeCheck)
 						{
 							if (rep0 == 0xFFFFFFFF)
 								break;
@@ -361,6 +362,12 @@ namespace SevenZip.Compression.LZMA
 			SetDictionarySize(dictionarySize);
 			SetLiteralProperties(lp, lc);
 			SetPosBitsProperties(pb);
+		}
+
+		public bool Train(System.IO.Stream stream)
+		{
+			_solid = true;
+			return m_OutWindow.Train(stream);
 		}
 
 		/*

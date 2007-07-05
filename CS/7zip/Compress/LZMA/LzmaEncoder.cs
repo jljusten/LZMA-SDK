@@ -1072,6 +1072,8 @@ namespace SevenZip.Compression.LZMA
 				_matchFinder.Init();
 				_needReleaseMFStream = true;
 				_inStream = null;
+				if (_trainSize > 0)
+					_matchFinder.Skip(_trainSize);
 			}
 
 			if (_finished)
@@ -1467,5 +1469,12 @@ namespace SevenZip.Compression.LZMA
 				}
 			}
 		}
+
+		uint _trainSize = 0;
+		public void SetTrainSize(uint trainSize)
+		{
+			_trainSize = trainSize;
+		}
+		
 	}
 }
