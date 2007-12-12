@@ -57,7 +57,17 @@ static CPropIdToName kPropIdToName[] =
   { kpidGroup, L"Group" },
   { kpidBlock, L"Block" },
   { kpidComment, L"Comment" },
-  { kpidPosition, L"Position" }
+  { kpidPosition, L"Position" },
+  { kpidPrefix, L"Prefix" },
+  { kpidNumSubFolders, L"Folders" },
+  { kpidNumSubFiles, L"Files" },
+  { kpidUnpackVer, L"Version" },
+  { kpidVolume, L"Volume" },
+  { kpidIsVolume, L"Multivolume" },
+  { kpidOffset, L"Offset" },
+  { kpidLinks, L"Links" },
+  { kpidNumBlocks, L"Blocks" },
+  { kpidNumVolumes, L"Volumes" }
 };
 
 static const char kEmptyAttributeChar = '.';
@@ -69,6 +79,7 @@ static const char kArchiveAttributeChar   = 'A';
 
 static const char *kListing = "Listing archive: ";
 static const wchar_t *kFilesMessage = L"files";
+static const wchar_t *kDirsMessage = L"folders";
 
 static void GetAttributesString(DWORD wa, bool directory, char *s)
 {
@@ -118,7 +129,7 @@ CFieldInfoInit kStandardFieldTable[] =
   { kpidAttributes, L"Attr", kRight, kCenter, 1, 5 },
   { kpidSize, L"Size", kRight, kRight, 1, 12 },
   { kpidPackedSize, L"Compressed", kRight, kRight, 1, 12 },
-  { kpidPath, L"Name", kLeft, kLeft, 2, 12 }
+  { kpidPath, L"Name", kLeft, kLeft, 2, 24 }
 };
 
 void PrintSpaces(int numSpaces)
@@ -162,8 +173,8 @@ public:
       const NWindows::NFile::NFind::CFileInfoW &archiveFileInfo,
       UInt32 index,
       bool techMode);
-  HRESULT PrintSummaryInfo(UInt64 numFiles, const UInt64 *size, 
-      const UInt64 *compressedSize);
+  HRESULT PrintSummaryInfo(UInt64 numFiles, UInt64 numDirs, 
+      const UInt64 *size, const UInt64 *compressedSize);
 };
 
 void CFieldPrinter::Init(const CFieldInfoInit *standardFieldTable, int numItems)
@@ -183,6 +194,19 @@ void CFieldPrinter::Init(const CFieldInfoInit *standardFieldTable, int numItems)
   }
 }
 
+static UString GetPropName(PROPID propID, BSTR name)
+{
+  for (int i = 0; i < sizeof(kPropIdToName) / sizeof(kPropIdToName[0]); i++)
+  {
+    const CPropIdToName &propIdToName = kPropIdToName[i];
+    if (propIdToName.PropID == propID)
+      return propIdToName.Name;
+  }
+  if (name)
+    return name;
+  return L"?";
+}
+
 HRESULT CFieldPrinter::Init(IInArchive *archive)
 {
   Clear();
@@ -196,21 +220,7 @@ HRESULT CFieldPrinter::Init(IInArchive *archive)
     RINOK(archive->GetPropertyInfo(i, &name, &propID, &vt));
     CFieldInfo fieldInfo;
     fieldInfo.PropID = propID;
-    if (name != NULL)
-      fieldInfo.Name = name;
-    else
-    {
-      fieldInfo.Name = L"Unknown";
-      for (int i = 0; i < sizeof(kPropIdToName) / sizeof(kPropIdToName[0]); i++)
-      {
-        const CPropIdToName &propIdToName = kPropIdToName[i];
-        if (propIdToName.PropID == propID)
-        {
-          fieldInfo.Name = propIdToName.Name;
-          break;
-        }
-      }
-    }
+    fieldInfo.Name = GetPropName(propID, name);
     _fields.Add(fieldInfo);
   }
   return S_OK;
@@ -334,6 +344,9 @@ HRESULT CFieldPrinter::PrintItemInfo(IInArchive *archive,
     else
     {
       UString s = ConvertPropertyToString(propVariant, fieldInfo.PropID);
+      s.Replace(wchar_t(0xA), L' '); 
+      s.Replace(wchar_t(0xD), L' '); 
+
       if (techMode)
         g_StdOut << s;
       else
@@ -354,7 +367,7 @@ void PrintNumberString(EAdjustment adjustment, int width, const UInt64 *value)
 }
 
 
-HRESULT CFieldPrinter::PrintSummaryInfo(UInt64 numFiles, 
+HRESULT CFieldPrinter::PrintSummaryInfo(UInt64 numFiles, UInt64 numDirs, 
     const UInt64 *size, const UInt64 *compressedSize)
 {
   for (int i = 0; i < _fields.Size(); i++)
@@ -373,6 +386,11 @@ HRESULT CFieldPrinter::PrintSummaryInfo(UInt64 numFiles,
       UString temp = textString;
       temp += L" ";
       temp += kFilesMessage;
+      temp += L", ";
+      ConvertUInt64ToString(numDirs, textString);
+      temp += textString;
+      temp += L" ";
+      temp += kDirsMessage;
       PrintString(fieldInfo.TextAdjustment, 0, temp);
     }
     else 
@@ -403,7 +421,7 @@ HRESULT ListArchives(
   if (!techMode)
     fieldPrinter.Init(kStandardFieldTable, sizeof(kStandardFieldTable) / sizeof(kStandardFieldTable[0]));
 
-  UInt64 numFiles2 = 0, totalPackSize2 = 0, totalUnPackSize2 = 0;
+  UInt64 numFiles2 = 0, numDirs2 = 0, totalPackSize2 = 0, totalUnPackSize2 = 0;
   UInt64 *totalPackSizePointer2 = 0, *totalUnPackSizePointer2 = 0;
   for (int i = 0; i < archivePaths.Size(); i++)
   {
@@ -451,7 +469,32 @@ HRESULT ListArchives(
     const UString defaultItemName = archiveLink.GetDefaultItemName();
 
     if (enableHeaders)
+    {
       g_StdOut << endl << kListing << archiveName << endl << endl;
+
+      UInt32 numProps;
+      if (archive->GetNumberOfArchiveProperties(&numProps) == S_OK)
+      {
+        for (UInt32 i = 0; i < numProps; i++)
+        {
+          CMyComBSTR name;
+          PROPID propID;
+          VARTYPE vt;
+          if (archive->GetArchivePropertyInfo(i, &name, &propID, &vt) != S_OK)
+            continue;
+          NCOM::CPropVariant prop;
+          if (archive->GetArchiveProperty(propID, &prop) != S_OK)
+            continue;
+          UString s = ConvertPropertyToString(prop, propID);
+          if (!s.IsEmpty())
+            g_StdOut << GetPropName(propID, name) << " = " << s << endl;
+        }
+      }
+      if (techMode)
+        g_StdOut << "----------\n";
+      if (numProps > 0)
+        g_StdOut << endl;
+    }
 
     if (enableHeaders && !techMode)
     {
@@ -465,7 +508,7 @@ HRESULT ListArchives(
     {
       RINOK(fieldPrinter.Init(archive));
     }
-    UInt64 numFiles = 0, totalPackSize = 0, totalUnPackSize = 0;
+    UInt64 numFiles = 0, numDirs = 0, totalPackSize = 0, totalUnPackSize = 0;
     UInt64 *totalPackSizePointer = 0, *totalUnPackSizePointer = 0;
     UInt32 numItems;
     RINOK(archive->GetNumberOfItems(&numItems));
@@ -495,8 +538,11 @@ HRESULT ListArchives(
         totalPackSizePointer = &totalPackSize;
       
       g_StdOut << endl;
-      
-      numFiles++;
+
+      if (isFolder)
+        numDirs++;
+      else
+        numFiles++;
       totalPackSize += packSize;
       totalUnPackSize += unpackSize;
     }
@@ -504,7 +550,7 @@ HRESULT ListArchives(
     {
       fieldPrinter.PrintTitleLines();
       g_StdOut << endl;
-      fieldPrinter.PrintSummaryInfo(numFiles, totalUnPackSizePointer, totalPackSizePointer);
+      fieldPrinter.PrintSummaryInfo(numFiles, numDirs, totalUnPackSizePointer, totalPackSizePointer);
       g_StdOut << endl;
     }
     if (totalPackSizePointer != 0)
@@ -518,13 +564,14 @@ HRESULT ListArchives(
       totalUnPackSize2 += totalUnPackSize;
     }
     numFiles2 += numFiles;
+    numDirs2 += numDirs;
   }
   if (enableHeaders && !techMode && archivePaths.Size() > 1)
   {
     g_StdOut << endl;
     fieldPrinter.PrintTitleLines();
     g_StdOut << endl;
-    fieldPrinter.PrintSummaryInfo(numFiles2, totalUnPackSizePointer2, totalPackSizePointer2);
+    fieldPrinter.PrintSummaryInfo(numFiles2, numDirs2, totalUnPackSizePointer2, totalPackSizePointer2);
     g_StdOut << endl;
     g_StdOut << "Archives: " << archivePaths.Size() << endl;
   }

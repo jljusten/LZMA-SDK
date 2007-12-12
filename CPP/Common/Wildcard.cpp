@@ -4,6 +4,13 @@
 
 #include "Wildcard.h"
 
+bool g_CaseSensitive = 
+  #ifdef _WIN32
+    false;
+  #else
+    true;
+  #endif
+
 static const wchar_t kAnyCharsChar = L'*';
 static const wchar_t kAnyCharChar = L'?';
 
@@ -29,49 +36,46 @@ static inline bool IsCharDirLimiter(wchar_t c)
     c == kDirDelimiter2);
 }
 
-// -----------------------------------------
-// this function tests is name matches mask
-// ? - any wchar_t or empty
-// * - any characters or empty
-
-static bool EnhancedMaskTest(const UString &mask, int maskPos, 
-    const UString &name, int namePos)
+int CompareFileNames(const UString &s1, const UString &s2)
 {
-  int maskLen = mask.Length() - maskPos;
-  int nameLen = name.Length() - namePos;
-  if (maskLen == 0) 
-    if (nameLen == 0)
-      return true;
-    else
-      return false;
-  wchar_t maskChar = mask[maskPos];
-  if(maskChar == kAnyCharChar)
+  if (g_CaseSensitive)
+    return s1.Compare(s2);
+  return s1.CompareNoCase(s2);
+}
+
+// -----------------------------------------
+// this function compares name with mask
+// ? - any char
+// * - any char or empty
+
+static bool EnhancedMaskTest(const wchar_t *mask, const wchar_t *name)
+{
+  for (;;)
   {
-    /*
-    if (EnhancedMaskTest(mask, maskPos + 1, name, namePos))
-      return true;
-    */
-    if (nameLen == 0) 
-      return false;
-    return EnhancedMaskTest(mask,  maskPos + 1, name, namePos + 1);
-  }
-  else if(maskChar == kAnyCharsChar)
-  {
-    if (EnhancedMaskTest(mask, maskPos + 1, name, namePos))
-      return true;
-    if (nameLen == 0) 
-      return false;
-    return EnhancedMaskTest(mask, maskPos, name, namePos + 1);
-  }
-  else
-  {
-    wchar_t c = name[namePos];
-    if (maskChar != c)
-#ifdef _WIN32
-      if (MyCharUpper(maskChar) != MyCharUpper(c))
-#endif
+    wchar_t m = *mask;
+    wchar_t c = *name;
+    if (m == 0) 
+      return (c == 0);
+    if (m == kAnyCharsChar)
+    {
+      if (EnhancedMaskTest(mask + 1, name))
+        return true;
+      if (c == 0) 
         return false;
-    return EnhancedMaskTest(mask,  maskPos + 1, name, namePos + 1);
+    }
+    else
+    {
+      if (m == kAnyCharChar)
+      {
+        if (c == 0) 
+          return false;
+      }
+      else if (m != c)
+        if (g_CaseSensitive || MyCharUpper(m) != MyCharUpper(c))
+          return false;
+      mask++;
+    }
+    name++;
   }
 }
 
@@ -130,7 +134,7 @@ UString ExtractFileNameFromPath(const UString &path)
 
 bool CompareWildCardWithName(const UString &mask, const UString &name)
 {
-  return EnhancedMaskTest(mask, 0, name, 0);
+  return EnhancedMaskTest(mask, name);
 }
 
 bool DoesNameContainWildCard(const UString &path)
@@ -200,7 +204,7 @@ bool CItem::CheckPath(const UStringVector &pathParts, bool isFile) const
 int CCensorNode::FindSubNode(const UString &name) const
 {
   for (int i = 0; i < SubNodes.Size(); i++)
-    if (SubNodes[i].Name.CompareNoCase(name) == 0)
+    if (CompareFileNames(SubNodes[i].Name, name) == 0)
       return i;
   return -1;
 }
@@ -360,7 +364,7 @@ void CCensorNode::ExtendExclude(const CCensorNode &fromNodes)
 int CCensor::FindPrefix(const UString &prefix) const
 {
   for (int i = 0; i < Pairs.Size(); i++)
-    if (Pairs[i].Prefix.CompareNoCase(prefix) == 0)
+    if (CompareFileNames(Pairs[i].Prefix, prefix) == 0)
       return i;
   return -1;
 }

@@ -7,12 +7,9 @@
 #include "Common/CommandLineParser.h"
 #include "Common/MyException.h"
 #include "Common/IntToString.h"
-#include "Common/ListFileUtils.h"
-#include "Common/StdInStream.h"
 #include "Common/StdOutStream.h"
 #include "Common/StringConvert.h"
 #include "Common/StringToInt.h"
-#include "Common/Wildcard.h"
 
 #include "Windows/FileDir.h"
 #include "Windows/FileName.h"
@@ -106,6 +103,7 @@ static const char *kHelpString =
     "  -si[{name}]: read data from stdin\n"
     "  -slt: show technical information for l (List) command\n"
     "  -so: write data to stdout\n"
+    "  -ssc[-]: set sensitive case mode\n"
     "  -ssw: compress shared files\n"
     "  -t{Type}: Set type of archive\n"
     "  -v{Size}[b|k|m|g]: Create volumes\n"
@@ -395,12 +393,13 @@ int Main2(
       eo.Properties = options.ExtractProperties;
       #endif
       UString errorMessage;
+      CDecompressStat stat;
       HRESULT result = DecompressArchives(
           codecs,
           options.ArchivePathsSorted, 
           options.ArchivePathsFullSorted,
           options.WildcardCensor.Pairs.Front().Head, 
-          eo, &openCallback, ecs, errorMessage);
+          eo, &openCallback, ecs, errorMessage, stat);
       if (!errorMessage.IsEmpty())
       {
         stdStream << endl << "Error: " << errorMessage;
@@ -408,15 +407,14 @@ int Main2(
           result = E_FAIL;
       }
 
+      stdStream << endl;
       if (ecs->NumArchives > 1)
-      {
-        stdStream << endl << endl << "Total:" << endl;
         stdStream << "Archives: " << ecs->NumArchives << endl;
-      }
       if (ecs->NumArchiveErrors != 0 || ecs->NumFileErrors != 0)
       {
         if (ecs->NumArchives > 1)
         {
+          stdStream << endl;
           if (ecs->NumArchiveErrors != 0)
             stdStream << "Archive Errors: " << ecs->NumArchiveErrors << endl;
           if (ecs->NumFileErrors != 0)
@@ -428,6 +426,13 @@ int Main2(
       }
       if (result != S_OK)
         throw CSystemException(result);
+      if (stat.NumFolders != 0)
+        stdStream << "Folders: " << stat.NumFolders << endl;
+      if (stat.NumFiles != 1 || stat.NumFolders != 0)
+          stdStream << "Files: " << stat.NumFiles << endl;
+      stdStream 
+           << "Size:       " << stat.UnpackSize << endl
+           << "Compressed: " << stat.PackSize << endl;
     }
     else
     {

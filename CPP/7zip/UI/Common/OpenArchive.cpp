@@ -55,7 +55,7 @@ HRESULT GetArchiveItemFileTime(IInArchive *archive, UInt32 index,
   return S_OK;
 }
 
-static HRESULT IsArchiveItemProp(IInArchive *archive, UInt32 index, PROPID propID, bool &result)
+HRESULT IsArchiveItemProp(IInArchive *archive, UInt32 index, PROPID propID, bool &result)
 {
   NCOM::CPropVariant prop;
   RINOK(archive->GetProperty(index, propID, &prop));
@@ -155,6 +155,33 @@ HRESULT OpenArchive(
     }
     orderIndices2 += orderIndices;
     orderIndices = orderIndices2;
+  }
+  else if (extension == L"000" || extension == L"001")
+  {
+    CByteBuffer byteBuffer;
+    const UInt32 kBufferSize = (1 << 10);
+    byteBuffer.SetCapacity(kBufferSize);
+    Byte *buffer = byteBuffer;
+    RINOK(inStream->Seek(0, STREAM_SEEK_SET, NULL));
+    UInt32 processedSize;
+    RINOK(ReadStream(inStream, buffer, kBufferSize, &processedSize));
+    if (processedSize >= 16)
+    {
+      Byte kRarHeader[] = {0x52 , 0x61, 0x72, 0x21, 0x1a, 0x07, 0x00};
+      if (TestSignature(buffer, kRarHeader, 7) && buffer[9] == 0x73 && (buffer[10] && 1) != 0)
+      {
+        for (int i = 0; i < orderIndices.Size(); i++)
+        {
+          int index = orderIndices[i];
+          const CArcInfoEx &ai = codecs->Formats[index];
+          if (ai.Name.CompareNoCase(L"rar") != 0)
+            continue;
+          orderIndices.Delete(i--);
+          orderIndices.Insert(0, index);
+          break;
+        }
+      }
+    }
   }
   #endif
 
@@ -339,8 +366,10 @@ HRESULT MyOpenArchive(
     UString &defaultItemName0,
     UString &defaultItemName1,
     UStringVector &volumePaths,
+    UInt64 &volumesSize,
     IOpenCallbackUI *openCallbackUI)
 {
+  volumesSize = 0;
   COpenCallbackImp *openCallbackSpec = new COpenCallbackImp;
   CMyComPtr<IArchiveOpenCallback> openCallback = openCallbackSpec;
   openCallbackSpec->Callback = openCallbackUI;
@@ -364,6 +393,7 @@ HRESULT MyOpenArchive(
   volumePaths.Add(prefix + name);
   for (int i = 0; i < openCallbackSpec->FileNames.Size(); i++)
     volumePaths.Add(prefix + openCallbackSpec->FileNames[i]);
+  volumesSize = openCallbackSpec->TotalSize;
   return S_OK;
 }
 
@@ -408,6 +438,7 @@ HRESULT MyOpenArchive(CCodecs *codecs,
     &archiveLink.Archive0, &archiveLink.Archive1, 
     archiveLink.DefaultItemName0, archiveLink.DefaultItemName1, 
     archiveLink.VolumePaths,
+    archiveLink.VolumesSize,
     openCallbackUI);
   archiveLink.IsOpen = (res == S_OK);
   return res;
