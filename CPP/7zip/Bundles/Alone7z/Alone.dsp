@@ -704,6 +704,30 @@ SOURCE=..\..\Common\VirtThread.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\Compress\Branch\ARM.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\Branch\ARM.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\Branch\ARMThumb.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\Branch\ARMThumb.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\Branch\BCJ2Register.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\Branch\BCJRegister.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Compress\Branch\BranchCoder.cpp
 # End Source File
 # Begin Source File
@@ -712,7 +736,35 @@ SOURCE=..\..\Compress\Branch\BranchCoder.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Compress\Branch\BranchRegister.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Compress\Branch\Coder.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\Branch\IA64.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\Branch\IA64.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\Branch\PPC.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\Branch\PPC.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\Branch\SPARC.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\Branch\SPARC.h
 # End Source File
 # Begin Source File
 
@@ -1390,6 +1442,15 @@ SOURCE=..\..\..\..\C\Compress\Branch\BranchX86.c
 
 SOURCE=..\..\..\..\C\Compress\Branch\BranchX86.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\C\Compress\Branch\BranchX86_2.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\C\Compress\Branch\BranchX86_2.h
+# End Source File
 # End Group
 # Begin Source File
 
@@ -1416,6 +1477,34 @@ SOURCE=..\..\..\..\C\IStream.h
 # Begin Source File
 
 SOURCE=..\..\..\..\C\Compress\Lz\LzHash.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\C\LzmaDec.c
+
+!IF  "$(CFG)" == "Alone - Win32 Release"
+
+# ADD CPP /O2
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "Alone - Win32 Debug"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "Alone - Win32 ReleaseU"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "Alone - Win32 DebugU"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\C\LzmaDec.h
 # End Source File
 # Begin Source File
 

@@ -1,6 +1,13 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+  4.58 beta      2008-05-05
+  -------------------------
+    - ANSI-C LZMA Decoder was rewritten for speed optimizations.
+    - ANSI-C LZMA Encoder was included to LZMA SDK.
+    - C++ LZMA code now is just wrapper over ANSI-C code.
+
+  
   4.57           2007-12-12
   -------------------------
     - Speed optimizations in Ñ++ LZMA Decoder. 
@@ -185,7 +192,7 @@ HISTORY of the LZMA SDK
 
 HISTORY of the LZMA
 -------------------
-  2001-2007:  Improvements to LZMA compressing/decompressing code, 
+  2001-2008:  Improvements to LZMA compressing/decompressing code, 
               keeping compatibility with original LZMA format
   1996-2001:  Development of LZMA compression format
 
