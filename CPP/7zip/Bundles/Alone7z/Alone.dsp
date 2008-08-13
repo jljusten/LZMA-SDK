@@ -505,6 +505,10 @@ SOURCE=..\..\..\Windows\Thread.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Windows\Time.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Windows\Time.h
 # End Source File
 # End Group
@@ -704,22 +708,6 @@ SOURCE=..\..\Common\VirtThread.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\Compress\Branch\ARM.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\ARM.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\ARMThumb.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\ARMThumb.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\Compress\Branch\BCJ2Register.cpp
 # End Source File
 # Begin Source File
@@ -736,35 +724,19 @@ SOURCE=..\..\Compress\Branch\BranchCoder.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Compress\Branch\BranchMisc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\Branch\BranchMisc.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Compress\Branch\BranchRegister.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\Compress\Branch\Coder.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\IA64.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\IA64.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\PPC.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\PPC.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\SPARC.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\SPARC.h
 # End Source File
 # Begin Source File
 
@@ -1189,6 +1161,42 @@ SOURCE=..\..\Archive\Split\SplitHandler.cpp
 SOURCE=..\..\Archive\Split\SplitHandler.h
 # End Source File
 # End Group
+# Begin Group "LZM"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\Archive\Lzma\LzmaArcRegister.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Archive\Lzma\LzmaFiltersDecode.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Archive\Lzma\LzmaFiltersDecode.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Archive\Lzma\LzmaHandler.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Archive\Lzma\LzmaHandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Archive\Lzma\LzmaIn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Archive\Lzma\LzmaIn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Archive\Lzma\LzmaItem.h
+# End Source File
+# End Group
 # End Group
 # Begin Group "UI Common"
 
@@ -1381,77 +1389,6 @@ SOURCE=..\..\PropID.h
 # Begin Group "C"
 
 # PROP Default_Filter ""
-# Begin Group "C Branch"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Branch\BranchARM.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Branch\BranchARM.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Branch\BranchARMThumb.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Branch\BranchARMThumb.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Branch\BranchIA64.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Branch\BranchIA64.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Branch\BranchPPC.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Branch\BranchPPC.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Branch\BranchSPARC.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Branch\BranchSPARC.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Branch\BranchTypes.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Branch\BranchX86.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Branch\BranchX86.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Branch\BranchX86_2.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Branch\BranchX86_2.h
-# End Source File
-# End Group
 # Begin Source File
 
 SOURCE=..\..\..\..\C\7zCrc.c
@@ -1472,11 +1409,52 @@ SOURCE=..\..\..\..\C\Alloc.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\C\Bra.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\C\Bra.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\C\Bra86.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\C\BraIA64.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\C\IStream.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\C\LzFind.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\C\LzFind.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\C\LzFindMt.c
+# SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\C\LzFindMt.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\C\Compress\Lz\LzHash.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\C\LzHash.h
 # End Source File
 # Begin Source File
 
@@ -1508,21 +1486,12 @@ SOURCE=..\..\..\..\C\LzmaDec.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\C\Compress\Lz\MatchFinder.c
+SOURCE=..\..\..\..\C\LzmaEnc.c
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\C\Compress\Lz\MatchFinder.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Lz\MatchFinderMt.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\C\Compress\Lz\MatchFinderMt.h
+SOURCE=..\..\..\..\C\LzmaEnc.h
 # End Source File
 # Begin Source File
 
