@@ -1,7 +1,12 @@
 HISTORY of the LZMA SDK
 -----------------------
 
-4.59 beta      2008-07-27
+4.60 beta      2008-08-19
+-------------------------
+- Some minor fixes.
+
+
+4.59 beta      2008-08-13
 -------------------------
 - Bug was fixed:
    LZMA Encoder in fast compression mode could access memory outside of 
