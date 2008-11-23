@@ -163,7 +163,7 @@ public class LzmaAlone
 	
 	public static void main(String[] args) throws Exception
 	{
-		System.out.println("\nLZMA (Java) 4.42 Copyright (c) 1999-2006 Igor Pavlov  2006-05-15\n");
+		System.out.println("\nLZMA (Java) 4.61  2008-11-23\n");
 		
 		if (args.length < 1)
 		{
@@ -205,7 +205,7 @@ public class LzmaAlone
 					throw new Exception("Incorrect compression mode");
 				if (!encoder.SetDictionarySize(params.DictionarySize))
 					throw new Exception("Incorrect dictionary size");
-				if (!encoder.SeNumFastBytes(params.Fb))
+				if (!encoder.SetNumFastBytes(params.Fb))
 					throw new Exception("Incorrect -fb value");
 				if (!encoder.SetMatchFinder(params.MatchFinder))
 					throw new Exception("Incorrect -mf value");

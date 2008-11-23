@@ -118,7 +118,7 @@ namespace SevenZip
 		}
 		static int Main2(string[] args)
 		{
-			System.Console.WriteLine("\nLZMA# 4.49 Copyright (c) 1999-2007 Igor Pavlov  2006-07-05\n");
+			System.Console.WriteLine("\nLZMA# 4.61  2008-11-23\n");
 
 			if (args.Length == 0)
 			{

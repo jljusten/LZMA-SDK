@@ -1,6 +1,15 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+4.61 beta      2008-11-23
+-------------------------
+- The bug in ANSI-C LZMA Decoder was fixed:
+    If encoded stream was corrupted, decoder could access memory 
+    outside of allocated range.
+- Some changes in ANSI-C 7z Decoder interfaces.
+- LZMA SDK is placed in the public domain.
+
+
 4.60 beta      2008-08-19
 -------------------------
 - Some minor fixes.
@@ -8,9 +17,9 @@ HISTORY of the LZMA SDK
 
 4.59 beta      2008-08-13
 -------------------------
-- Bug was fixed:
-   LZMA Encoder in fast compression mode could access memory outside of 
-   allocated range in some rare cases.
+- The bug was fixed:
+    LZMA Encoder in fast compression mode could access memory outside of 
+    allocated range in some rare cases.
 
 
 4.58 beta      2008-05-05
@@ -48,7 +57,7 @@ HISTORY of the LZMA SDK
 
 4.39 beta      2006-04-14
 -------------------------
-- Bug in versions 4.33b:4.38b was fixed:
+- The bug in versions 4.33b:4.38b was fixed:
   C++ version of LZMA encoder could not correctly compress 
   files larger than 2 GB with HC4 match finder (-mfhc4).
   
@@ -60,9 +69,9 @@ HISTORY of the LZMA SDK
 
 4.35 beta      2005-03-02
 -------------------------
-- Bug was fixed in C++ version of LZMA Decoder:
-   If encoded stream was corrupted, decoder could access memory 
-   outside of allocated range.
+- The bug was fixed in C++ version of LZMA Decoder:
+    If encoded stream was corrupted, decoder could access memory 
+    outside of allocated range.
 
 
 4.34 beta      2006-02-27
@@ -81,7 +90,7 @@ HISTORY of the LZMA SDK
 - Compression ratio was improved in -a2 mode
 - Speed optimizations for compressing in -a2 mode
 - -fb switch now supports values up to 273
-- Bug in 7z_C (7zIn.c) was fixed:
+- The bug in 7z_C (7zIn.c) was fixed:
   It used Alloc/Free functions from different memory pools.
   So if program used two memory pools, it worked incorrectly.
 - 7z_C: .7z format supporting was improved
@@ -98,7 +107,7 @@ HISTORY of the LZMA SDK
 
 4.27           2005-08-07
 -------------------------
-- Bug in LzmaDecodeSize.c was fixed:
+- The bug in LzmaDecodeSize.c was fixed:
    if _LZMA_IN_CB and _LZMA_OUT_READ were defined,
    decompressing worked incorrectly.
 
@@ -143,7 +152,7 @@ HISTORY of the LZMA SDK
 
 4.16           2005-03-29
 -------------------------
-- Bug was fixed in LzmaDecode.c (ANSI-C LZMA Decoder): 
+- The bug was fixed in LzmaDecode.c (ANSI-C LZMA Decoder): 
    If _LZMA_OUT_READ was defined, and if encoded stream was corrupted,
    decoder could access memory outside of allocated range.
 - Speed optimization of ANSI-C LZMA Decoder (now it's about 20% faster).
@@ -156,7 +165,7 @@ HISTORY of the LZMA SDK
 
 4.06           2004-09-05
 -------------------------
-- Bug in v4.05 was fixed:
+- The bug in v4.05 was fixed:
     LZMA-Encoder didn't release output stream in some cases.
 
 

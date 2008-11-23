@@ -1372,7 +1372,7 @@ public class Encoder
 		return true;
 	}
 
-	public boolean SeNumFastBytes(int numFastBytes)
+	public boolean SetNumFastBytes(int numFastBytes)
 	{
 		if (numFastBytes < 5 || numFastBytes > Base.kMatchMaxLen)
 			return false;
