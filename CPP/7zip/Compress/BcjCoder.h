@@ -1,13 +1,14 @@
-// x86.h
+// BcjCoder.h
 
-#ifndef __X86_H
-#define __X86_H
+#ifndef __COMPRESS_BCJ_CODER_H
+#define __COMPRESS_BCJ_CODER_H
 
-#include "BranchCoder.h"
 extern "C"
 {
-#include "../../../../C/Bra.h"
+#include "../../../C/Bra.h"
 }
+
+#include "BranchCoder.h"
 
 struct CBranch86
 {

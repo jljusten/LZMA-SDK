@@ -1,12 +1,13 @@
 // BranchMisc.cpp
 
 #include "StdAfx.h"
-#include "BranchMisc.h"
 
 extern "C"
 {
-#include "../../../../C/Bra.h"
+#include "../../../C/Bra.h"
 }
+
+#include "BranchMisc.h"
 
 UInt32 CBC_ARM_Encoder::SubFilter(Byte *data, UInt32 size)
   { return (UInt32)::ARM_Convert(data, size, _bufferPos, 1); }

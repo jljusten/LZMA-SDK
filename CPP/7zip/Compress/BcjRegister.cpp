@@ -1,10 +1,11 @@
-// BranchRegister.cpp
+// BcjRegister.cpp
 
 #include "StdAfx.h"
 
-#include "../../Common/RegisterCodec.h"
+#include "../Common/RegisterCodec.h"
 
-#include "x86.h"
+#include "BcjCoder.h"
+
 static void *CreateCodec() { return (void *)(ICompressFilter *)(new CBCJ_x86_Decoder()); }
 #ifndef EXTRACT_ONLY
 static void *CreateCodecOut() { return (void *)(ICompressFilter *)(new CBCJ_x86_Encoder());  }

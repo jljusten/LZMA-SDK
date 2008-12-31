@@ -1,18 +1,19 @@
-// LZMA/Encoder.h
+// LzmaEncoder.h
 
 #ifndef __LZMA_ENCODER_H
 #define __LZMA_ENCODER_H
 
-#include "../../../Common/MyCom.h"
-#include "../../ICoder.h"
-
 extern "C"
 {
-  #include "../../../../C/LzmaEnc.h"
+#include "../../../C/LzmaEnc.h"
 }
 
+#include "../../Common/MyCom.h"
+
+#include "../ICoder.h"
+
 namespace NCompress {
-namespace NLZMA {
+namespace NLzma {
 
 struct CSeqInStream
 {
@@ -35,7 +36,7 @@ class CEncoder :
   public CMyUnknownImp
 {
   CLzmaEncHandle _encoder;
-  
+ 
   CSeqInStream _seqInStream;
   CSeqOutStream _seqOutStream;
 
@@ -48,19 +49,10 @@ public:
       ICompressWriteCoderProperties
       )
     
- 
-  STDMETHOD(Code)(ISequentialInStream *inStream,
-      ISequentialOutStream *outStream,
-      const UInt64 *inSize, const UInt64 *outSize,
-      ICompressProgressInfo *progress);
-
-  // ICompressSetCoderProperties2
-  STDMETHOD(SetCoderProperties)(const PROPID *propIDs,
-      const PROPVARIANT *properties, UInt32 numProperties);
-  
-  // ICompressWriteCoderProperties
+  STDMETHOD(Code)(ISequentialInStream *inStream, ISequentialOutStream *outStream,
+      const UInt64 *inSize, const UInt64 *outSize, ICompressProgressInfo *progress);
+  STDMETHOD(SetCoderProperties)(const PROPID *propIDs, const PROPVARIANT *props, UInt32 numProps);
   STDMETHOD(WriteCoderProperties)(ISequentialOutStream *outStream);
-
   STDMETHOD(SetOutStream)(ISequentialOutStream *outStream);
   STDMETHOD(ReleaseOutStream)();
 

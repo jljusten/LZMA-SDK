@@ -1,15 +1,15 @@
-// LZMADecoder.cpp
+// LzmaDecoder.cpp
 
 #include "StdAfx.h"
 
-#include "LZMADecoder.h"
-#include "../../../Common/Defs.h"
-#include "../../Common/StreamUtils.h"
-
 extern "C"
 {
-  #include "../../../../C/Alloc.h"
+#include "../../../C/Alloc.h"
 }
+
+#include "../Common/StreamUtils.h"
+
+#include "LzmaDecoder.h"
 
 static HRESULT SResToHRESULT(SRes res)
 {
@@ -26,7 +26,7 @@ static HRESULT SResToHRESULT(SRes res)
 }
 
 namespace NCompress {
-namespace NLZMA {
+namespace NLzma {
 
 static const UInt32 kInBufSize = 1 << 20;
 
@@ -76,9 +76,8 @@ STDMETHODIMP CDecoder::SetOutStreamSize(const UInt64 *outSize)
   return S_OK;
 }
 
-STDMETHODIMP CDecoder::Code(ISequentialInStream *inStream,
-    ISequentialOutStream *outStream, const UInt64 * /* inSize */,
-    const UInt64 *outSize, ICompressProgressInfo *progress)
+STDMETHODIMP CDecoder::Code(ISequentialInStream *inStream, ISequentialOutStream *outStream,
+    const UInt64 * /* inSize */, const UInt64 *outSize, ICompressProgressInfo *progress)
 {
   if (_inBuf == 0)
     return S_FALSE;

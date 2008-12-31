@@ -1,12 +1,11 @@
 // BranchCoder.h
 
-#ifndef __BRANCH_CODER_H
-#define __BRANCH_CODER_H
+#ifndef __COMPRESS_BRANCH_CODER_H
+#define __COMPRESS_BRANCH_CODER_H
 
-#include "Common/MyCom.h"
-#include "Common/Types.h"
+#include "../../Common/MyCom.h"
 
-#include "../../ICoder.h"
+#include "../ICoder.h"
 
 class CBranchConverter:
   public ICompressFilter,

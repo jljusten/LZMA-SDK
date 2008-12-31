@@ -1,7 +1,7 @@
-// Compress/RangeCoder/RangeCoderBit.h
+// Compress/RangeCoderBit.h
 
-#ifndef __COMPRESS_RANGECODER_BIT_H
-#define __COMPRESS_RANGECODER_BIT_H
+#ifndef __COMPRESS_RANGE_CODER_BIT_H
+#define __COMPRESS_RANGE_CODER_BIT_H
 
 #include "RangeCoder.h"
 

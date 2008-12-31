@@ -1,6 +1,11 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+4.63           2008-12-31
+-------------------------
+- Some minor fixes
+
+
 4.61 beta      2008-11-23
 -------------------------
 - The bug in ANSI-C LZMA Decoder was fixed:

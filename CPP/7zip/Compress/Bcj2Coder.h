@@ -1,11 +1,13 @@
-// x86_2.h
+// Bcj2Coder.h
 
-#ifndef __BRANCH_X86_2_H
-#define __BRANCH_X86_2_H
+#ifndef __COMPRESS_BCJ2_CODER_H
+#define __COMPRESS_BCJ2_CODER_H
 
-#include "../../../Common/MyCom.h"
-#include "../RangeCoder/RangeCoderBit.h"
-#include "../../ICoder.h"
+#include "../../Common/MyCom.h"
+
+#include "../ICoder.h"
+
+#include "RangeCoderBit.h"
 
 namespace NCompress {
 namespace NBcj2 {

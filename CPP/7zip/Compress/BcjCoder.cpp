@@ -1,7 +1,8 @@
-// x86.cpp
+// BcjCoder.cpp
 
 #include "StdAfx.h"
-#include "x86.h"
+
+#include "BcjCoder.h"
 
 UInt32 CBCJ_x86_Encoder::SubFilter(Byte *data, UInt32 size)
 {

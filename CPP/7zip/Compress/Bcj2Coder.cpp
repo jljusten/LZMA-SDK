@@ -1,12 +1,13 @@
-// x86_2.cpp
+// Bcj2Coder.cpp
 
 #include "StdAfx.h"
-#include "x86_2.h"
 
 extern "C"
 {
-#include "../../../../C/Alloc.h"
+#include "../../../C/Alloc.h"
 }
+
+#include "Bcj2Coder.h"
 
 namespace NCompress {
 namespace NBcj2 {

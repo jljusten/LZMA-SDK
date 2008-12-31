@@ -1,6 +1,7 @@
 // BranchCoder.cpp
 
 #include "StdAfx.h"
+
 #include "BranchCoder.h"
 
 STDMETHODIMP CBranchConverter::Init()

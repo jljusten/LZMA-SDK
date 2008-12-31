@@ -1,18 +1,18 @@
-// LZMADecoder.h
+// LzmaDecoder.h
 
 #ifndef __LZMA_DECODER_H
 #define __LZMA_DECODER_H
 
-#include "../../../Common/MyCom.h"
-#include "../../ICoder.h"
-
 extern "C"
 {
-  #include "../../../../C/LzmaDec.h"
+#include "../../../C/LzmaDec.h"
 }
 
+#include "../../Common/MyCom.h"
+#include "../ICoder.h"
+
 namespace NCompress {
-namespace NLZMA {
+namespace NLzma {
 
 class CDecoder:
   public ICompressCoder,
@@ -49,14 +49,10 @@ public:
       ICompressGetInStreamProcessedSize)
   #endif
 
-  STDMETHOD(Code)(ISequentialInStream *inStream,
-      ISequentialOutStream *outStream, const UInt64 *_inSize, const UInt64 *outSize,
-      ICompressProgressInfo *progress);
-
+  STDMETHOD(Code)(ISequentialInStream *inStream, ISequentialOutStream *outStream,
+      const UInt64 *inSize, const UInt64 *outSize, ICompressProgressInfo *progress);
   STDMETHOD(SetDecoderProperties2)(const Byte *data, UInt32 size);
-
   STDMETHOD(GetInStreamProcessedSize)(UInt64 *value);
-
   STDMETHOD(SetInStream)(ISequentialInStream *inStream);
   STDMETHOD(ReleaseInStream)();
   STDMETHOD(SetOutStreamSize)(const UInt64 *outSize);

@@ -1,10 +1,11 @@
 // Compress/CopyCoder.h
 
-#ifndef __COMPRESS_COPYCODER_H
-#define __COMPRESS_COPYCODER_H
+#ifndef __COMPRESS_COPY_CODER_H
+#define __COMPRESS_COPY_CODER_H
 
-#include "../../ICoder.h"
-#include "../../../Common/MyCom.h"
+#include "../../Common/MyCom.h"
+
+#include "../ICoder.h"
 
 namespace NCompress {
 
@@ -21,10 +22,8 @@ public:
 
   MY_UNKNOWN_IMP1(ICompressGetInStreamProcessedSize)
 
-  STDMETHOD(Code)(ISequentialInStream *inStream,
-      ISequentialOutStream *outStream,
-      const UInt64 *inSize, const UInt64 *outSize,
-      ICompressProgressInfo *progress);
+  STDMETHOD(Code)(ISequentialInStream *inStream, ISequentialOutStream *outStream,
+      const UInt64 *inSize, const UInt64 *outSize, ICompressProgressInfo *progress);
   STDMETHOD(GetInStreamProcessedSize)(UInt64 *value);
 };
 

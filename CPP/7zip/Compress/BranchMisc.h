@@ -1,7 +1,7 @@
 // BranchMisc.h
 
-#ifndef __BRANCHMISC_H
-#define __BRANCHMISC_H
+#ifndef __COMPRESS_BRANCH_MISC_H
+#define __COMPRESS_BRANCH_MISC_H
 
 #include "BranchCoder.h"
 

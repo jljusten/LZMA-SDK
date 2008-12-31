@@ -1,10 +1,10 @@
-// Compress/RangeCoder/RangeCoder.h
+// Compress/RangeCoder.h
 
-#ifndef __COMPRESS_RANGECODER_H
-#define __COMPRESS_RANGECODER_H
+#ifndef __COMPRESS_RANGE_CODER_H
+#define __COMPRESS_RANGE_CODER_H
 
-#include "../../Common/InBuffer.h"
-#include "../../Common/OutBuffer.h"
+#include "../Common/InBuffer.h"
+#include "../Common/OutBuffer.h"
 
 namespace NCompress {
 namespace NRangeCoder {

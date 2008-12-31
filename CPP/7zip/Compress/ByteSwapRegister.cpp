@@ -2,9 +2,10 @@
 
 #include "StdAfx.h"
 
-#include "../../Common/RegisterCodec.h"
+#include "../Common/RegisterCodec.h"
 
 #include "ByteSwap.h"
+
 static void *CreateCodec2() { return (void *)(ICompressFilter *)(new CByteSwap2); }
 static void *CreateCodec4() { return (void *)(ICompressFilter *)(new CByteSwap4); }
 

@@ -4,11 +4,12 @@
 
 extern "C"
 {
-#include "../../../../C/Alloc.h"
+#include "../../../C/Alloc.h"
 }
 
+#include "../Common/StreamUtils.h"
+
 #include "CopyCoder.h"
-#include "../../Common/StreamUtils.h"
 
 namespace NCompress {
 
@@ -59,4 +60,3 @@ STDMETHODIMP CCopyCoder::GetInStreamProcessedSize(UInt64 *value)
 }
 
 }
-

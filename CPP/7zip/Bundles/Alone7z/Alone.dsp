@@ -589,22 +589,6 @@ SOURCE=..\..\Common\LockedStream.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Common\LSBFDecoder.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\LSBFDecoder.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\LSBFEncoder.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\LSBFEncoder.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\Common\MethodId.cpp
 # End Source File
 # Begin Source File
@@ -618,14 +602,6 @@ SOURCE=..\..\Common\MethodProps.cpp
 # Begin Source File
 
 SOURCE=..\..\Common\MethodProps.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\MSBFDecoder.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\MSBFEncoder.h
 # End Source File
 # Begin Source File
 
@@ -703,236 +679,6 @@ SOURCE=..\..\Common\VirtThread.h
 # Begin Group "Compress"
 
 # PROP Default_Filter ""
-# Begin Group "Branch"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\BCJ2Register.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\BCJRegister.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\BranchCoder.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\BranchCoder.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\BranchMisc.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\BranchMisc.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\BranchRegister.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\Coder.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\x86.cpp
-
-!IF  "$(CFG)" == "Alone - Win32 Release"
-
-# ADD CPP /O2
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 Debug"
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 ReleaseU"
-
-# ADD CPP /O2
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 DebugU"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\x86.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\x86_2.cpp
-
-!IF  "$(CFG)" == "Alone - Win32 Release"
-
-# ADD CPP /O2
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 Debug"
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 ReleaseU"
-
-# ADD CPP /O2
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 DebugU"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Branch\x86_2.h
-# End Source File
-# End Group
-# Begin Group "Copy"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\Compress\Copy\CopyCoder.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Copy\CopyCoder.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\Copy\CopyRegister.cpp
-# End Source File
-# End Group
-# Begin Group "LZ"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\Compress\LZ\LZOutWindow.cpp
-
-!IF  "$(CFG)" == "Alone - Win32 Release"
-
-# ADD CPP /O1
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 Debug"
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 ReleaseU"
-
-# ADD CPP /O1
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 DebugU"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\LZ\LZOutWindow.h
-# End Source File
-# End Group
-# Begin Group "LZMA"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\Compress\LZMA\LZMA.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\LZMA\LZMADecoder.cpp
-
-!IF  "$(CFG)" == "Alone - Win32 Release"
-
-# ADD CPP /O2
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 Debug"
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 ReleaseU"
-
-# ADD CPP /O2
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 DebugU"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\LZMA\LZMADecoder.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\LZMA\LZMAEncoder.cpp
-
-!IF  "$(CFG)" == "Alone - Win32 Release"
-
-# ADD CPP /O2
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 Debug"
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 ReleaseU"
-
-# ADD CPP /O2
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 DebugU"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\LZMA\LZMAEncoder.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\LZMA\LZMARegister.cpp
-# End Source File
-# End Group
-# Begin Group "RangeCoder"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\Compress\RangeCoder\RangeCoder.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\RangeCoder\RangeCoderBit.cpp
-
-!IF  "$(CFG)" == "Alone - Win32 Release"
-
-# ADD CPP /O1
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 Debug"
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 ReleaseU"
-
-# ADD CPP /O1
-
-!ELSEIF  "$(CFG)" == "Alone - Win32 DebugU"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\RangeCoder\RangeCoderBit.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\RangeCoder\RangeCoderBitTree.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Compress\RangeCoder\RangeCoderOpt.h
-# End Source File
-# End Group
 # Begin Group "LZMA_Alone"
 
 # PROP Default_Filter ""
@@ -953,6 +699,110 @@ SOURCE=..\..\Compress\LZMA_Alone\LzmaBenchCon.cpp
 SOURCE=..\..\Compress\LZMA_Alone\LzmaBenchCon.h
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=..\..\Compress\Bcj2Coder.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\Bcj2Coder.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\Bcj2Register.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\BcjCoder.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\BcjCoder.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\BcjRegister.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\BranchCoder.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\BranchCoder.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\BranchMisc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\BranchMisc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\BranchRegister.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\ByteSwap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\ByteSwap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\ByteSwapRegister.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\CopyCoder.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\CopyCoder.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\CopyRegister.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\LzmaDecoder.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\LzmaDecoder.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\LzmaEncoder.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\LzmaEncoder.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\LzmaRegister.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\RangeCoder.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\RangeCoderBit.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\RangeCoderBitTree.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Compress\RangeCoderOpt.h
+# End Source File
 # End Group
 # Begin Group "Archive"
 

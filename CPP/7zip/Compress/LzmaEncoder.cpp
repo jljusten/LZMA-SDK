@@ -1,29 +1,15 @@
-// LZMA/Encoder.cpp
+// LzmaEncoder.cpp
 
 #include "StdAfx.h"
 
-#include <stdio.h>
-
-#ifdef _WIN32
-#define USE_ALLOCA
-#endif
-
-#ifdef USE_ALLOCA
-#ifdef _WIN32
-#include <malloc.h>
-#else
-#include <stdlib.h>
-#endif
-#endif
-
-#include "LZMAEncoder.h"
-
-#include "../../Common/StreamUtils.h"
-
 extern "C"
 {
-#include "../../../../C/Alloc.h"
+#include "../../../C/Alloc.h"
 }
+
+#include "../Common/StreamUtils.h"
+
+#include "LzmaEncoder.h"
 
 static HRESULT SResToHRESULT(SRes res)
 {
@@ -38,7 +24,7 @@ static HRESULT SResToHRESULT(SRes res)
 }
 
 namespace NCompress {
-namespace NLZMA {
+namespace NLzma {
 
 static const UInt32 kStreamStepSize = (UInt32)1 << 31;
 
@@ -123,14 +109,14 @@ static int ParseMatchFinder(const wchar_t *s, int *btMode, int *numHashBytes)
 }
 
 STDMETHODIMP CEncoder::SetCoderProperties(const PROPID *propIDs,
-    const PROPVARIANT *properties, UInt32 numProperties)
+    const PROPVARIANT *coderProps, UInt32 numProps)
 {
   CLzmaEncProps props;
   LzmaEncProps_Init(&props);
 
-  for (UInt32 i = 0; i < numProperties; i++)
+  for (UInt32 i = 0; i < numProps; i++)
   {
-    const PROPVARIANT &prop = properties[i];
+    const PROPVARIANT &prop = coderProps[i];
     switch (propIDs[i])
     {
       case NCoderPropID::kNumFastBytes:
@@ -203,10 +189,8 @@ SRes CompressProgress(void *pp, UInt64 inSize, UInt64 outSize)
   return (SRes)p->Res;
 }
 
-STDMETHODIMP CEncoder::Code(ISequentialInStream *inStream,
-    ISequentialOutStream *outStream, const UInt64 * /* inSize */,
-    const UInt64 * /* outSize */,
-    ICompressProgressInfo *progress)
+STDMETHODIMP CEncoder::Code(ISequentialInStream *inStream, ISequentialOutStream *outStream,
+    const UInt64 * /* inSize */, const UInt64 * /* outSize */, ICompressProgressInfo *progress)
 {
   CCompressProgressImp progressImp;
   progressImp.p.Progress = CompressProgress;

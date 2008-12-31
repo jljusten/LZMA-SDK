@@ -2,7 +2,7 @@
 
 #include "StdAfx.h"
 
-#include "../../Common/RegisterCodec.h"
+#include "../Common/RegisterCodec.h"
 
 #include "BranchMisc.h"
 
