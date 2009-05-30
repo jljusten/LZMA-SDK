@@ -3,24 +3,18 @@
 #include "StdAfx.h"
 
 #include "Common/ComTry.h"
-#include "Common/Defs.h"
-#include "Common/NewHandler.h"
-#include "Common/StringConvert.h"
+#include "Common/MyString.h"
 
 #include "Windows/PropVariant.h"
-#include "Windows/Time.h"
 
-#include "../../Common/ProgressUtils.h"
+#include "../Common/ProgressUtils.h"
+#include "../Common/RegisterArc.h"
 
-#include "../../Compress/CopyCoder.h"
+#include "../Compress/CopyCoder.h"
 
-#include "../Common/ItemNameUtils.h"
-#include "../Common/MultiStream.h"
-
-#include "SplitHandler.h"
+#include "Common/MultiStream.h"
 
 using namespace NWindows;
-using namespace NTime;
 
 namespace NArchive {
 namespace NSplit {
@@ -28,19 +22,50 @@ namespace NSplit {
 STATPROPSTG kProps[] =
 {
   { NULL, kpidPath, VT_BSTR},
-  { NULL, kpidSize, VT_UI8},
-  { NULL, kpidPackSize, VT_UI8},
+  { NULL, kpidSize, VT_UI8}
+};
+
+STATPROPSTG kArcProps[] =
+{
+  { NULL, kpidNumVolumes, VT_UI4}
+};
+
+class CHandler:
+  public IInArchive,
+  public IInArchiveGetStream,
+  public CMyUnknownImp
+{
+  UString _subName;
+  CObjectVector<CMyComPtr<IInStream> > _streams;
+  CRecordVector<UInt64> _sizes;
+  UInt64 _totalSize;
+public:
+  MY_UNKNOWN_IMP2(IInArchive, IInArchiveGetStream)
+  INTERFACE_IInArchive(;)
+  STDMETHOD(GetStream)(UInt32 index, ISequentialInStream **stream);
 };
 
 IMP_IInArchive_Props
-IMP_IInArchive_ArcProps_NO
+IMP_IInArchive_ArcProps
 
-class CSeqName
+STDMETHODIMP CHandler::GetArchiveProperty(PROPID propID, PROPVARIANT *value)
 {
-public:
+  NCOM::CPropVariant prop;
+  switch(propID)
+  {
+    case kpidMainSubfile: prop = (UInt32)0; break;
+    case kpidNumVolumes: prop = (UInt32)_streams.Size(); break;
+  }
+  prop.Detach(value);
+  return S_OK;
+}
+
+struct CSeqName
+{
   UString _unchangedPart;
   UString _changedPart;
   bool _splitStyle;
+  
   UString GetNextName()
   {
     UString newName;
@@ -125,23 +150,24 @@ STDMETHODIMP CHandler::Open(IInStream *stream,
         &openVolumeCallback) != S_OK)
       return S_FALSE;
     
+    UString name;
     {
       NCOM::CPropVariant prop;
       RINOK(openVolumeCallback->GetProperty(kpidName, &prop));
       if (prop.vt != VT_BSTR)
         return S_FALSE;
-      _name = prop.bstrVal;
+      name = prop.bstrVal;
     }
     
-    int dotPos = _name.ReverseFind('.');
+    int dotPos = name.ReverseFind('.');
     UString prefix, ext;
     if (dotPos >= 0)
     {
-      prefix = _name.Left(dotPos + 1);
-      ext = _name.Mid(dotPos + 1);
+      prefix = name.Left(dotPos + 1);
+      ext = name.Mid(dotPos + 1);
     }
     else
-      ext = _name;
+      ext = name;
     UString extBig = ext;
     extBig.MakeUpper();
 
@@ -258,9 +284,7 @@ STDMETHODIMP CHandler::GetProperty(UInt32 /* index */, PROPID propID, PROPVARIAN
   NWindows::NCOM::CPropVariant prop;
   switch(propID)
   {
-    case kpidPath:
-      prop = _subName;
-      break;
+    case kpidPath: prop = _subName; break;
     case kpidSize:
     case kpidPackSize:
       prop = _totalSize;
@@ -271,48 +295,28 @@ STDMETHODIMP CHandler::GetProperty(UInt32 /* index */, PROPID propID, PROPVARIAN
 }
 
 STDMETHODIMP CHandler::Extract(const UInt32* indices, UInt32 numItems,
-    Int32 _aTestMode, IArchiveExtractCallback *_anExtractCallback)
+    Int32 _aTestMode, IArchiveExtractCallback *extractCallback)
 {
   COM_TRY_BEGIN
+  if (numItems == UInt32(-1))
+    numItems = 1;
+  if (numItems == 0)
+    return S_OK;
+  if (numItems != 1 || indices[0] != 0)
+    return E_INVALIDARG;
 
-  if (numItems != UInt32(-1))
-  {
-    if (numItems != 1)
-      return E_INVALIDARG;
-    if (indices[0] != 0)
-      return E_INVALIDARG;
-  }
   bool testMode = (_aTestMode != 0);
-  CMyComPtr<IArchiveExtractCallback> extractCallback = _anExtractCallback;
-  extractCallback->SetTotal(_totalSize);
-  
-  /*
-  CMyComPtr<IArchiveVolumeExtractCallback> volumeExtractCallback;
-  if (extractCallback.QueryInterface(&volumeExtractCallback) != S_OK)
-    return E_FAIL;
-  */
-
   UInt64 currentTotalSize = 0;
-  UInt64 currentItemSize;
-
-  RINOK(extractCallback->SetCompleted(&currentTotalSize));
-  CMyComPtr<ISequentialOutStream> realOutStream;
-  Int32 askMode;
-  askMode = testMode ? NArchive::NExtract::NAskMode::kTest :
-  NArchive::NExtract::NAskMode::kExtract;
-  Int32 index = 0;
-  RINOK(extractCallback->GetStream(index, &realOutStream, askMode));
-  
+  RINOK(extractCallback->SetTotal(_totalSize));
+  CMyComPtr<ISequentialOutStream> outStream;
+  Int32 askMode = testMode ?
+      NArchive::NExtract::NAskMode::kTest :
+      NArchive::NExtract::NAskMode::kExtract;
+  RINOK(extractCallback->GetStream(0, &outStream, askMode));
+  if (!testMode && !outStream)
+    return S_OK;
   RINOK(extractCallback->PrepareOperation(askMode));
-  if (testMode)
-  {
-    RINOK(extractCallback->SetOperationResult(NArchive::NExtract::NOperationResult::kOK));
-    return S_OK;
-  }
   
-  if (!testMode && (!realOutStream))
-    return S_OK;
-
   NCompress::CCopyCoder *copyCoderSpec = new NCompress::CCopyCoder;
   CMyComPtr<ICompressCoder> copyCoder = copyCoderSpec;
 
@@ -320,22 +324,23 @@ STDMETHODIMP CHandler::Extract(const UInt32* indices, UInt32 numItems,
   CMyComPtr<ICompressProgressInfo> progress = lps;
   lps->Init(extractCallback, false);
 
-  for (int i = 0; i < _streams.Size(); i++, currentTotalSize += currentItemSize)
+  for (int i = 0; i < _streams.Size(); i++)
   {
     lps->InSize = lps->OutSize = currentTotalSize;
     RINOK(lps->SetCur());
     IInStream *inStream = _streams[i];
     RINOK(inStream->Seek(0, STREAM_SEEK_SET, NULL));
-    RINOK(copyCoder->Code(inStream, realOutStream, NULL, NULL, progress));
-    currentItemSize = copyCoderSpec->TotalSize;
+    RINOK(copyCoder->Code(inStream, outStream, NULL, NULL, progress));
+    currentTotalSize += copyCoderSpec->TotalSize;
   }
-  realOutStream.Release();
+  outStream.Release();
   return extractCallback->SetOperationResult(NArchive::NExtract::NOperationResult::kOK);
   COM_TRY_END
 }
 
 STDMETHODIMP CHandler::GetStream(UInt32 index, ISequentialInStream **stream)
 {
+  COM_TRY_BEGIN
   if (index != 0)
     return E_INVALIDARG;
   *stream = 0;
@@ -352,6 +357,14 @@ STDMETHODIMP CHandler::GetStream(UInt32 index, ISequentialInStream **stream)
   streamSpec->Init();
   *stream = streamTemp.Detach();
   return S_OK;
+  COM_TRY_END
 }
+
+static IInArchive *CreateArc() { return new CHandler;  }
+
+static CArcInfo g_ArcInfo =
+{ L"Split", L"001", 0, 0xEA, { 0 }, 0, false, CreateArc, 0 };
+
+REGISTER_ARC(Split)
 
 }}

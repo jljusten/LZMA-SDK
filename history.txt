@@ -1,6 +1,12 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+9.04           2009-05-30
+-------------------------
+- LZMA2 compression method support
+- xz format support
+
+
 4.65           2009-02-03
 -------------------------
 - Some minor fixes

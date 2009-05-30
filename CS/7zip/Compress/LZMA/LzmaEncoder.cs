@@ -1304,7 +1304,7 @@ namespace SevenZip.Compression.LZMA
 		{
 			properties[0] = (Byte)((_posStateBits * 5 + _numLiteralPosStateBits) * 9 + _numLiteralContextBits);
 			for (int i = 0; i < 4; i++)
-				properties[1 + i] = (Byte)(_dictionarySize >> (8 * i));
+				properties[1 + i] = (Byte)((_dictionarySize >> (8 * i)) & 0xFF);
 			outStream.Write(properties, 0, kPropSize);
 		}
 		
