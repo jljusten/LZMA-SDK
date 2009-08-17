@@ -1,14 +1,15 @@
-/* Lzma86Enc.h -- LZMA + x86 (BCJ) Filter Encoder
-2009-02-07 : Igor Pavlov : Public domain */
+/* Lzma86.h -- LZMA + x86 (BCJ) Filter
+2009-08-14 : Igor Pavlov : Public domain */
 
-#ifndef __LZMA86_ENC_H
-#define __LZMA86_ENC_H
+#ifndef __LZMA86_H
+#define __LZMA86_H
 
-#include "../Types.h"
+#include "Types.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+EXTERN_C_BEGIN
+
+#define LZMA86_SIZE_OFFSET (1 + 5)
+#define LZMA86_HEADER_SIZE (LZMA86_SIZE_OFFSET + 8)
 
 /*
 It's an example for LZMA + x86 Filter use.
@@ -16,8 +17,8 @@ You can use .lzma86 extension, if you write that stream to file.
 .lzma86 header adds one additional byte to standard .lzma header.
 .lzma86 header (14 bytes):
   Offset Size  Description
-    0     1    = 0 - no filter,
-               = 1 - x86 filter
+    0     1    = 0 - no filter, pure LZMA
+               = 1 - x86 filter + LZMA
     1     1    lc, lp and pb in encoded form
     2     4    dictSize (little endian)
     6     8    uncompressed size (little endian)
@@ -26,7 +27,6 @@ You can use .lzma86 extension, if you write that stream to file.
 Lzma86_Encode
 -------------
 level - compression level: 0 <= level <= 9, the default value for "level" is 5.
-
 
 dictSize - The dictionary size in bytes. The maximum value is
         128 MB = (1 << 27) bytes for 32-bit version
@@ -71,8 +71,41 @@ enum ESzFilterMode
 SRes Lzma86_Encode(Byte *dest, size_t *destLen, const Byte *src, size_t srcLen,
     int level, UInt32 dictSize, int filterMode);
 
-#ifdef __cplusplus
-}
-#endif
+
+/*
+Lzma86_GetUnpackSize:
+  In:
+    src      - input data
+    srcLen   - input data size
+  Out:
+    unpackSize - size of uncompressed stream
+  Return code:
+    SZ_OK               - OK
+    SZ_ERROR_INPUT_EOF  - Error in headers
+*/
+
+SRes Lzma86_GetUnpackSize(const Byte *src, SizeT srcLen, UInt64 *unpackSize);
+
+/*
+Lzma86_Decode:
+  In:
+    dest     - output data
+    destLen  - output data size
+    src      - input data
+    srcLen   - input data size
+  Out:
+    destLen  - processed output size
+    srcLen   - processed input size
+  Return code:
+    SZ_OK           - OK
+    SZ_ERROR_DATA  - Data error
+    SZ_ERROR_MEM   - Memory allocation error
+    SZ_ERROR_UNSUPPORTED - unsupported file
+    SZ_ERROR_INPUT_EOF - it needs more bytes in input buffer
+*/
+
+SRes Lzma86_Decode(Byte *dest, SizeT *destLen, const Byte *src, SizeT *srcLen);
+
+EXTERN_C_END
 
 #endif

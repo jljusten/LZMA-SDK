@@ -4,7 +4,7 @@ LIB =
 RM = rm -f
 CFLAGS = -c -O2 -Wall
 
-OBJS = 7zAlloc.o 7zBuf.o 7zBuf2.o 7zCrc.o 7zDecode.o 7zExtract.o 7zHeader.o 7zIn.o 7zItem.o 7zMain.o LzmaDec.o Lzma2Dec.o Bra86.o Bcj2.o 7zFile.o 7zStream.o
+OBJS = 7zAlloc.o 7zBuf.o 7zBuf2.o 7zCrc.o 7zDec.o 7zIn.o 7zMain.o LzmaDec.o Lzma2Dec.o Bra86.o Bcj2.o 7zFile.o 7zStream.o
 
 all: $(PROG)
 
@@ -23,20 +23,11 @@ $(PROG): $(OBJS)
 7zCrc.o: ../../7zCrc.c
 	$(CXX) $(CFLAGS) ../../7zCrc.c
 
-7zDecode.o: 7zDecode.c
-	$(CXX) $(CFLAGS) 7zDecode.c
+7zDec.o: ../../7zDec.c
+	$(CXX) $(CFLAGS) ../../7zDec.c
 
-7zExtract.o: 7zExtract.c
-	$(CXX) $(CFLAGS) 7zExtract.c
-
-7zHeader.o: 7zHeader.c
-	$(CXX) $(CFLAGS) 7zHeader.c
-
-7zIn.o: 7zIn.c
-	$(CXX) $(CFLAGS) 7zIn.c
-
-7zItem.o: 7zItem.c
-	$(CXX) $(CFLAGS) 7zItem.c
+7zIn.o: ../../7zIn.c
+	$(CXX) $(CFLAGS) ../../7zIn.c
 
 7zMain.o: 7zMain.c
 	$(CXX) $(CFLAGS) 7zMain.c

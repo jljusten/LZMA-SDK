@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="LzmaUtil" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="7z" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
 
-CFG=LzmaUtil - Win32 Debug
+CFG=7z - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "LzmaUtil.mak".
+!MESSAGE NMAKE /f "7z.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "LzmaUtil.mak" CFG="LzmaUtil - Win32 Debug"
+!MESSAGE NMAKE /f "7z.mak" CFG="7z - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "LzmaUtil - Win32 Release" (based on "Win32 (x86) Console Application")
-!MESSAGE "LzmaUtil - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "7z - Win32 Release" (based on "Win32 (x86) Console Application")
+!MESSAGE "7z - Win32 Debug" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project
@@ -28,7 +28,7 @@ CFG=LzmaUtil - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "LzmaUtil - Win32 Release"
+!IF  "$(CFG)" == "7z - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -42,8 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
-# SUBTRACT CPP /YX
+# ADD CPP /nologo /MD /W3 /GX /O2 /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_UNICODE" /D "UNICODE" /FAs /YX /FD /c
 # ADD BASE RSC /l 0x419 /d "NDEBUG"
 # ADD RSC /l 0x419 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -51,9 +50,10 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /out:"c:\util\lzmac.exe"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /out:"Release/7zDec.exe" /opt:NOWIN98
+# SUBTRACT LINK32 /pdb:none
 
-!ELSEIF  "$(CFG)" == "LzmaUtil - Win32 Debug"
+!ELSEIF  "$(CFG)" == "7z - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -67,8 +67,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
-# SUBTRACT CPP /YX
+# ADD CPP /nologo /W4 /Gm /GX /ZI /Od /D "_DEBUG" /D "_SZ_ALLOC_DEBUG2" /D "_SZ_NO_INT_64_A" /D "WIN32" /D "_CONSOLE" /D "_UNICODE" /D "UNICODE" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x419 /d "_DEBUG"
 # ADD RSC /l 0x419 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -76,93 +75,109 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /out:"c:\util\lzmac.exe" /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /out:"Debug/7zDec.exe" /pdbtype:sept
 
 !ENDIF 
 
 # Begin Target
 
-# Name "LzmaUtil - Win32 Release"
-# Name "LzmaUtil - Win32 Debug"
+# Name "7z - Win32 Release"
+# Name "7z - Win32 Debug"
+# Begin Group "Common"
+
+# PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\7zFile.c
+SOURCE=..\..\7zBuf.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\7zFile.h
+SOURCE=..\..\7zBuf.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\7zStream.c
+SOURCE=..\..\7zCrc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\7zVersion.h
+SOURCE=..\..\7zCrc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\Alloc.c
+SOURCE=..\..\7zFile.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\Alloc.h
+SOURCE=..\..\7zFile.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\CpuArch.h
+SOURCE=..\..\7zStream.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzFind.c
+SOURCE=..\..\Bcj2.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzFind.h
+SOURCE=..\..\Bcj2.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzFindMt.c
+SOURCE=..\..\Bra.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzFindMt.h
+SOURCE=..\..\Bra86.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzHash.h
+SOURCE=..\..\CpuArch.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzmaDec.c
+SOURCE=..\..\Lzma2Dec.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzmaDec.h
+SOURCE=..\..\Lzma2Dec.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzmaEnc.c
+SOURCE=..\..\LzmaDec.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzmaEnc.h
+SOURCE=..\..\LzmaDec.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\LzmaUtil.c
+SOURCE=..\..\Types.h
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=..\..\7z.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\Threads.c
+SOURCE=.\7zAlloc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\Threads.h
+SOURCE=.\7zAlloc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\Types.h
+SOURCE=..\..\7zDec.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\7zIn.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\7zMain.c
 # End Source File
 # End Target
 # End Project

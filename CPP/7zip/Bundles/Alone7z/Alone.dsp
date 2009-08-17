@@ -433,6 +433,10 @@ SOURCE=..\..\..\Windows\FileIO.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Windows\FileMapping.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Windows\FileName.cpp
 # End Source File
 # Begin Source File

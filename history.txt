@@ -1,6 +1,11 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+9.06           2009-08-17
+-------------------------
+- Some changes in ANSI-C 7z Decoder interfaces.
+
+
 9.04           2009-05-30
 -------------------------
 - LZMA2 compression method support

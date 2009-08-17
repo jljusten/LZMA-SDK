@@ -1,28 +1,23 @@
 /* Lzma86Enc.c -- LZMA + x86 (BCJ) Filter Encoder
-2008-08-05
-Igor Pavlov
-Public domain */
+2009-08-14 : Igor Pavlov : Public domain */
 
 #include <string.h>
 
-#include "Lzma86Enc.h"
+#include "Lzma86.h"
 
-#include "../Alloc.h"
-#include "../Bra.h"
-#include "../LzmaEnc.h"
+#include "Alloc.h"
+#include "Bra.h"
+#include "LzmaEnc.h"
 
 #define SZE_OUT_OVERFLOW SZE_DATA_ERROR
 
 static void *SzAlloc(void *p, size_t size) { p = p; return MyAlloc(size); }
 static void SzFree(void *p, void *address) { p = p; MyFree(address); }
-static ISzAlloc g_Alloc = { SzAlloc, SzFree };
-
-#define LZMA86_SIZE_OFFSET (1 + LZMA_PROPS_SIZE)
-#define LZMA86_HEADER_SIZE (LZMA86_SIZE_OFFSET + 8)
 
 int Lzma86_Encode(Byte *dest, size_t *destLen, const Byte *src, size_t srcLen,
     int level, UInt32 dictSize, int filterMode)
 {
+  ISzAlloc g_Alloc = { SzAlloc, SzFree };
   size_t outSize2 = *destLen;
   Byte *filteredStream;
   Bool useFilter;

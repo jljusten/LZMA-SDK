@@ -21,9 +21,9 @@ OBJS = \
   $(LIB_OBJS) \
   $(C_OBJS) \
 
-!include "../../CPP/Build.mak"
+!include "../../../CPP/Build.mak"
 
 $(LIB_OBJS): $(*B).c
 	$(COMPL_O2)
-$(C_OBJS): ../$(*B).c
+$(C_OBJS): ../../$(*B).c
 	$(COMPL_O2)

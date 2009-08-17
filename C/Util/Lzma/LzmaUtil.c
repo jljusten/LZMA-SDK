@@ -1,5 +1,5 @@
 /* LzmaUtil.c -- Test application for LZMA compression
-2008-11-23 : Igor Pavlov : Public domain */
+2009-08-14 : Igor Pavlov : Public domain */
 
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -7,11 +7,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../Alloc.h"
-#include "../7zFile.h"
-#include "../7zVersion.h"
-#include "../LzmaDec.h"
-#include "../LzmaEnc.h"
+#include "../../Alloc.h"
+#include "../../7zFile.h"
+#include "../../7zVersion.h"
+#include "../../LzmaDec.h"
+#include "../../LzmaEnc.h"
 
 const char *kCantReadMessage = "Can not read input file";
 const char *kCantWriteMessage = "Can not write output file";

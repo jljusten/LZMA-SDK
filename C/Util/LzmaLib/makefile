@@ -7,8 +7,6 @@ DEF_FILE = LzmaLib.def
 CFLAGS = $(CFLAGS) \
   -DCOMPRESS_MF_MT \
 
-LIBS = $(LIBS) oleaut32.lib
-
 LIB_OBJS = \
   $O\LzmaLibExports.obj \
 
@@ -26,12 +24,12 @@ OBJS = \
   $(C_OBJS) \
   $O\resource.res
 
-!include "../../CPP/Build.mak"
+!include "../../../CPP/Build.mak"
 
 $(SLIBPATH): $O $(OBJS)
 	lib -out:$(SLIBPATH) $(OBJS) $(LIBS)
 
 $(LIB_OBJS): $(*B).c
 	$(COMPL_O2)
-$(C_OBJS): ../$(*B).c
+$(C_OBJS): ../../$(*B).c
 	$(COMPL_O2)

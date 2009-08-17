@@ -1,14 +1,14 @@
-/* 7zDecode.c -- Decoding from 7z folder
-2009-05-03 : Igor Pavlov : Public domain */
+/* 7zDec.c -- Decoding from 7z folder
+2009-08-16 : Igor Pavlov : Public domain */
 
 #include <string.h>
 
-#include "../../Bcj2.h"
-#include "../../Bra.h"
-#include "../../LzmaDec.h"
-#include "../../Lzma2Dec.h"
+#include "7z.h"
 
-#include "7zDecode.h"
+#include "Bcj2.h"
+#include "Bra.h"
+#include "LzmaDec.h"
+#include "Lzma2Dec.h"
 
 #define k_Copy 0
 #define k_LZMA2 0x21
@@ -137,7 +137,7 @@ static SRes SzDecodeCopy(UInt64 inSize, ILookInStream *inStream, Byte *outBuffer
 #define IS_NO_BCJ(c) (c.MethodID != k_BCJ || c.NumInStreams != 1 || c.NumOutStreams != 1)
 #define IS_NO_BCJ2(c) (c.MethodID != k_BCJ2 || c.NumInStreams != 4 || c.NumOutStreams != 1)
 
-SRes CheckSupportedFolder(const CSzFolder *f)
+static SRes CheckSupportedFolder(const CSzFolder *f)
 {
   if (f->NumCoders < 1 || f->NumCoders > 4)
     return SZ_ERROR_UNSUPPORTED;
@@ -179,7 +179,7 @@ SRes CheckSupportedFolder(const CSzFolder *f)
   return SZ_ERROR_UNSUPPORTED;
 }
 
-UInt64 GetSum(const UInt64 *values, UInt32 index)
+static UInt64 GetSum(const UInt64 *values, UInt32 index)
 {
   UInt64 sum = 0;
   UInt32 i;
@@ -188,7 +188,7 @@ UInt64 GetSum(const UInt64 *values, UInt32 index)
   return sum;
 }
 
-SRes SzDecode2(const UInt64 *packSizes, const CSzFolder *folder,
+static SRes SzFolder_Decode2(const CSzFolder *folder, const UInt64 *packSizes,
     ILookInStream *inStream, UInt64 startPos,
     Byte *outBuffer, SizeT outSize, ISzAlloc *allocMain,
     Byte *tempBuf[])
@@ -296,13 +296,13 @@ SRes SzDecode2(const UInt64 *packSizes, const CSzFolder *folder,
   return SZ_OK;
 }
 
-SRes SzDecode(const UInt64 *packSizes, const CSzFolder *folder,
+SRes SzFolder_Decode(const CSzFolder *folder, const UInt64 *packSizes,
     ILookInStream *inStream, UInt64 startPos,
     Byte *outBuffer, size_t outSize, ISzAlloc *allocMain)
 {
   Byte *tempBuf[3] = { 0, 0, 0};
   int i;
-  SRes res = SzDecode2(packSizes, folder, inStream, startPos,
+  SRes res = SzFolder_Decode2(folder, packSizes, inStream, startPos,
       outBuffer, (SizeT)outSize, allocMain, tempBuf);
   for (i = 0; i < 3; i++)
     IAlloc_Free(allocMain, tempBuf[i]);

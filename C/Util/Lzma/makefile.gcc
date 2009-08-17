@@ -22,23 +22,23 @@ $(PROG): $(OBJS)
 LzmaUtil.o: LzmaUtil.c
 	$(CXX) $(CFLAGS) LzmaUtil.c
 
-Alloc.o: ../Alloc.c
-	$(CXX) $(CFLAGS) ../Alloc.c
+Alloc.o: ../../Alloc.c
+	$(CXX) $(CFLAGS) ../../Alloc.c
 
-LzFind.o: ../LzFind.c
-	$(CXX) $(CFLAGS) ../LzFind.c
+LzFind.o: ../../LzFind.c
+	$(CXX) $(CFLAGS) ../../LzFind.c
 
-LzmaDec.o: ../LzmaDec.c
-	$(CXX) $(CFLAGS) ../LzmaDec.c
+LzmaDec.o: ../../LzmaDec.c
+	$(CXX) $(CFLAGS) ../../LzmaDec.c
 
-LzmaEnc.o: ../LzmaEnc.c
-	$(CXX) $(CFLAGS) ../LzmaEnc.c
+LzmaEnc.o: ../../LzmaEnc.c
+	$(CXX) $(CFLAGS) ../../LzmaEnc.c
 
-7zFile.o: ../7zFile.c
-	$(CXX) $(CFLAGS) ../7zFile.c
+7zFile.o: ../../7zFile.c
+	$(CXX) $(CFLAGS) ../../7zFile.c
 
-7zStream.o: ../7zStream.c
-	$(CXX) $(CFLAGS) ../7zStream.c
+7zStream.o: ../../7zStream.c
+	$(CXX) $(CFLAGS) ../../7zStream.c
 
 clean:
 	-$(RM) $(PROG) $(OBJS)

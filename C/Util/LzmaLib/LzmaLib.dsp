@@ -104,59 +104,59 @@ SOURCE=.\LzmaLibExports.c
 # End Group
 # Begin Source File
 
-SOURCE=..\Alloc.c
+SOURCE=..\..\Alloc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\Alloc.h
+SOURCE=..\..\Alloc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\IStream.h
+SOURCE=..\..\IStream.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzFind.c
+SOURCE=..\..\LzFind.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzFind.h
+SOURCE=..\..\LzFind.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzFindMt.c
+SOURCE=..\..\LzFindMt.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzFindMt.h
+SOURCE=..\..\LzFindMt.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzHash.h
+SOURCE=..\..\LzHash.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzmaDec.c
+SOURCE=..\..\LzmaDec.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzmaDec.h
+SOURCE=..\..\LzmaDec.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzmaEnc.c
+SOURCE=..\..\LzmaEnc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzmaEnc.h
+SOURCE=..\..\LzmaEnc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzmaLib.c
+SOURCE=..\..\LzmaLib.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\LzmaLib.h
+SOURCE=..\..\LzmaLib.h
 # End Source File
 # Begin Source File
 
@@ -164,15 +164,15 @@ SOURCE=.\resource.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\Threads.c
+SOURCE=..\..\Threads.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\Threads.h
+SOURCE=..\..\Threads.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\Types.h
+SOURCE=..\..\Types.h
 # End Source File
 # End Target
 # End Project
