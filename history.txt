@@ -1,6 +1,14 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+9.09           2009-12-12
+-------------------------
+- The bug was fixed:
+   Utf16_To_Utf8 funstions in UTFConvert.cpp and 7zMain.c
+   incorrectly converted surrogate characters (the code >= 0x10000) to UTF-8.
+- Some bugs were fixed
+
+
 9.06           2009-08-17
 -------------------------
 - Some changes in ANSI-C 7z Decoder interfaces.
