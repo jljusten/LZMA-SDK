@@ -1,6 +1,11 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+9.11 beta      2010-03-15
+-------------------------
+- PPMd compression method support
+   
+
 9.09           2009-12-12
 -------------------------
 - The bug was fixed:
