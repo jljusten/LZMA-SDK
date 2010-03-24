@@ -1,6 +1,12 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+9.12 beta      2010-03-24
+-------------------------
+- The BUG in LZMA SDK 9.* was fixed: LZMA2 codec didn't work,
+  if more than 10 threads were used (or more than 20 threads in some modes).
+
+
 9.11 beta      2010-03-15
 -------------------------
 - PPMd compression method support
