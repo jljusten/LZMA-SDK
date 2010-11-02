@@ -1,6 +1,11 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+9.18 beta      2010-11-02
+-------------------------	
+- New small SFX module for installers (SfxSetup).
+
+
 9.12 beta      2010-03-24
 -------------------------
 - The BUG in LZMA SDK 9.* was fixed: LZMA2 codec didn't work,
