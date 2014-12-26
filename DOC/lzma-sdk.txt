@@ -1,4 +1,4 @@
-LZMA SDK 9.35
+LZMA SDK 9.36
 -------------
 
 LZMA SDK provides the documentation, samples, header files,
