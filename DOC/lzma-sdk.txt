@@ -1,5 +1,5 @@
-LZMA SDK 9.38
--------------
+LZMA SDK 15.00
+--------------
 
 LZMA SDK provides the documentation, samples, header files,
 libraries, and tools you need to develop applications that 
