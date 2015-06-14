@@ -1,5 +1,5 @@
 /* LzmaSpec.c -- LZMA Reference Decoder
-2013-07-28 : Igor Pavlov : Public domain */
+2015-06-14 : Igor Pavlov : Public domain */
 
 // This code implements LZMA file decoding according to LZMA specification.
 // This code is not optimized for speed.
@@ -141,27 +141,27 @@ public:
   CInputStream *InStream;
   bool Corrupted;
 
-  void Init();
+  bool Init();
   bool IsFinishedOK() const { return Code == 0; }
 
   UInt32 DecodeDirectBits(unsigned numBits);
   unsigned DecodeBit(CProb *prob);
 };
 
-void CRangeDecoder::Init()
+bool CRangeDecoder::Init()
 {
   Corrupted = false;
-  
-  if (InStream->ReadByte() != 0)
-    Corrupted = true;
-  
   Range = 0xFFFFFFFF;
   Code = 0;
+
+  Byte b = InStream->ReadByte();
+  
   for (int i = 0; i < 4; i++)
     Code = (Code << 8) | InStream->ReadByte();
   
-  if (Code == Range)
+  if (b != 0 || Code == Range)
     Corrupted = true;
+  return b == 0;
 }
 
 #define kTopValue ((UInt32)1 << 24)
@@ -466,8 +466,10 @@ private:
 
 int CLzmaDecoder::Decode(bool unpackSizeDefined, UInt64 unpackSize)
 {
+  if (!RangeDec.Init())
+    return LZMA_RES_ERROR;
+
   Init();
-  RangeDec.Init();
 
   UInt32 rep0 = 0, rep1 = 0, rep2 = 0, rep3 = 0;
   unsigned state = 0;
@@ -605,7 +607,7 @@ void PrintUInt64(const char *title, UInt64 v)
 
 int main2(int numArgs, const char *args[])
 {
-  Print("\nLZMA Reference Decoder 9.31 : Igor Pavlov : Public domain : 2013-02-06\n");
+  Print("\nLZMA Reference Decoder 15.00 : Igor Pavlov : Public domain : 2015-04-16\n");
   if (numArgs == 1)
     Print("\nUse: lzmaSpec a.lzma outFile");
 
@@ -657,7 +659,7 @@ int main2(int numArgs, const char *args[])
   Print("\n");
 
   lzmaDecoder.Create();
-  // we support the streams that have uncompressed size and marker.
+  
   int res = lzmaDecoder.Decode(unpackSizeDefined, unpackSize);
 
   PrintUInt64("Read    ", inStream.Processed);
