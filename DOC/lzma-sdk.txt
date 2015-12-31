@@ -1,4 +1,4 @@
-LZMA SDK 15.12
+LZMA SDK 15.13
 --------------
 
 LZMA SDK provides the documentation, samples, header files,
