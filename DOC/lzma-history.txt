@@ -1,6 +1,13 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+16.02          2016-05-21
+-------------------------
+- The BUG in 16.00 - 16.01 was fixed:
+  Split Handler (SplitHandler.cpp) returned incorrect 
+  total size value (kpidSize) for split archives.
+
+
 16.01          2016-05-19
 -------------------------	
 - Some internal changes to reduce the number of compiler warnings.
