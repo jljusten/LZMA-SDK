@@ -1,9 +1,14 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+16.01          2016-05-19
+-------------------------	
+- Some internal changes to reduce the number of compiler warnings.
+
+
 16.00          2016-05-10
 -------------------------	
-- Some bugs were fixed,
+- Some bugs were fixed.
 
 
 15.12          2015-11-19
