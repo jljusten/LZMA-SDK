@@ -1,6 +1,11 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+16.04          2016-10-04
+-------------------------
+- The bug was fixed in DllSecur.c.
+
+
 16.03          2016-09-28
 -------------------------
 - SFX modules now use some protection against DLL preloading attack.
