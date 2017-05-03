@@ -1,5 +1,5 @@
-LZMA SDK 16.04
---------------
+LZMA SDK 17.00 beta
+-------------------
 
 LZMA SDK provides the documentation, samples, header files,
 libraries, and tools you need to develop applications that 
