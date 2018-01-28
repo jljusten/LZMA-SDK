@@ -1,6 +1,13 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+18.01          2019-01-28
+-------------------------
+- The BUG in 17.01 - 18.00 beta was fixed:
+  XzDec.c : random block unpacking and XzUnpacker_IsBlockFinished()
+  didn't work correctly for xz archives without checksum (CRC).
+
+
 18.00 beta     2019-01-10
 -------------------------
 - The BUG in xz encoder was fixed:
