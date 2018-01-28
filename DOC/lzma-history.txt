@@ -1,6 +1,13 @@
 HISTORY of the LZMA SDK
 -----------------------
 
+18.00 beta     2019-01-10
+-------------------------
+- The BUG in xz encoder was fixed:
+  There was memory leak of 16 KB for each file compressed with 
+  xz compression method, if additional filter was used.
+
+
 17.01 beta     2017-08-28
 -------------------------
 - Minor speed optimization for LZMA2 (xz and 7z) multi-threading compression.
