@@ -1,5 +1,5 @@
-LZMA SDK 18.01
---------------
+LZMA SDK 18.03 beta
+-------------------
 
 LZMA SDK provides the documentation, samples, header files,
 libraries, and tools you need to develop applications that 
